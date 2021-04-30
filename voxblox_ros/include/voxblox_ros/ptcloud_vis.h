@@ -7,8 +7,8 @@
 #include <tf2_eigen_kdl/tf2_eigen_kdl.hpp>
 #include <pcl/point_types.h>
 #include <sensor_msgs/msg/point_cloud.h>
-#include <visualization_msgs/msg/dds_connext/Marker_.h>
-#include <visualization_msgs/msg/dds_connext/MarkerArray_.h>
+#include <visualization_msgs/msg/marker.h>
+#include <visualization_msgs/msg/marker_array.h>
 
 #include <voxblox/core/common.h>
 #include <voxblox/core/layer.h>

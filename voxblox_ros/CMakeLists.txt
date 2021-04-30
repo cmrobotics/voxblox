@@ -12,6 +12,7 @@ find_package(PCL REQUIRED)
 find_package(voxblox REQUIRED)
 find_package(voxblox_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(visualization_msgs)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)

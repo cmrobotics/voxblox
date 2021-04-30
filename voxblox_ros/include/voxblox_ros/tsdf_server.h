@@ -14,7 +14,7 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <std_srvs/Empty.h>
 #include "tf2_ros/transform_broadcaster.h"
-#include <visualization_msgs/msg/dds_connext/MarkerArray_.h>
+#include <visualization_msgs/msg/marker_array.h>
 
 #include <voxblox/alignment/icp.h>
 #include <voxblox/core/tsdf_map.h>
