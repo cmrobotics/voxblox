@@ -6,7 +6,7 @@
 
 #include <voxblox/core/esdf_map.h>
 #include <voxblox/integrator/esdf_integrator.h>
-#include <voxblox_msgs/Layer.h>
+#include <voxblox_msgs/msg/layer.h>
 
 #include "voxblox_ros/tsdf_server.h"
 
