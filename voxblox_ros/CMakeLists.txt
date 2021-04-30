@@ -8,6 +8,7 @@ project(voxblox_ros)
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
+find_package(PCL REQUIRED)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
@@ -22,7 +23,11 @@ set(dependencies
 # LIBRARIES #
 #############
 
-include_directories(include)
+include_directories(
+  include
+  ${PCL_INCLUDE_DIRS}
+  ${VOXBLOX_INCLUDE_DIRS}
+)
 
 add_library(esdf_server SHARED src/esdf_server.cc)
 list(APPEND voxblox_libs esdf_server)
@@ -46,22 +51,22 @@ endforeach()
 # EXECUTABLES #
 ###############
 
-add_executable(voxblox_eval src/voxblox_eval.cpp)
+add_executable(voxblox_eval src/voxblox_eval.cc)
 ament_target_dependencies(voxblox_eval ${dependencies})
 
-add_executable(tsdf_server src/tsdf_server.cpp)
-ament_target_dependencies(tsdf_server ${dependencies})
+#add_executable(tsdf_server src/tsdf_server.cpp)
+#ament_target_dependencies(tsdf_server ${dependencies})
 
-add_executable(esdf_server src/esdf_server.cpp)
-ament_target_dependencies(esdf_server ${dependencies})
+#add_executable(esdf_server src/esdf_server.cpp)
+#ament_target_dependencies(esdf_server ${dependencies})
 
-add_executable(intensity_server src/intensity_server.cpp)
-ament_target_dependencies(intensity_server ${dependencies})
+#add_executable(intensity_server src/intensity_server.cpp)
+#ament_target_dependencies(intensity_server ${dependencies})
 
-add_executable(simulation_eval src/simulation_eval.cpp)
+add_executable(simulation_eval src/simulation_eval.cc)
 ament_target_dependencies(simulation_eval ${dependencies})
 
-add_executable(visualize_tsdf src/visualize_tsdf.cpp)
+add_executable(visualize_tsdf src/visualize_tsdf.cc)
 ament_target_dependencies(visualize_tsdf ${dependencies})
 
 install(
@@ -86,6 +91,7 @@ if(BUILD_TESTING)
 
   find_package(ament_cmake_gtest REQUIRED)
 endif()
+
 
 ament_export_dependencies(${dependencies})
 

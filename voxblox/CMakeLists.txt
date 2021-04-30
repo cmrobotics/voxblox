@@ -206,13 +206,24 @@ include_directories(include)
 add_library (${PROJECT_NAME} ${${PROJECT_NAME}_SRCS})
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
+ament_export_targets(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
 
-install(TARGETS ${PROJECT_NAME} DESTINATION lib)
 install(
-    DIRECTORY ${CMAKE_SOURCE_DIR}/include/
-    DESTINATION include
-    FILES_MATCHING PATTERN "*.h*")
+  DIRECTORY include/
+  DESTINATION include
+)
 
+install(
+  TARGETS ${PROJECT_NAME}
+  EXPORT export_${PROJECT_NAME}
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+  RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include
+)
+
+ament_export_include_directories(include)
+ament_export_libraries(${PROJECT_NAME})
 
 #
 #if(BUILD_TESTING)
@@ -223,8 +234,5 @@ install(
 #endif()
 #
 
-ament_export_dependencies(${dependencies})
-
-ament_package()
-
-
+#set(VOXBLOX_INCLUDE_DIRS include
+#    CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)

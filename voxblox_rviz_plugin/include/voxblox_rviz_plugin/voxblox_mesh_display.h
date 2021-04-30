@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include <rviz/message_filter_display.h>
+#include <rviz_common/message_filter_display.h>
 #include <voxblox_msgs/Mesh.h>
 
 #include "voxblox_rviz_plugin/voxblox_mesh_visual.h"
