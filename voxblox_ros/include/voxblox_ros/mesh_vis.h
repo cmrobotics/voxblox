@@ -35,7 +35,7 @@
 #include <voxblox/integrator/tsdf_integrator.h>
 #include <voxblox/mesh/mesh.h>
 #include <voxblox/mesh/mesh_layer.h>
-#include <voxblox_msgs/msg/mesh.h>
+#include <voxblox_msgs/msg/mesh.hpp>
 
 #include "voxblox_ros/conversions.h"
 
@@ -271,7 +271,7 @@ inline void fillMarkerWithMesh(const MeshLayer::ConstPtr& mesh_layer,
     }
 
     for (size_t i = 0u; i < mesh->vertices.size(); i++) {
-      geometry_msgs::Point point_msg;
+      geometry_msgs::msg::Point point_msg;
       tf::pointEigenToMsg(mesh->vertices[i].cast<double>(), point_msg);
       marker->points.push_back(point_msg);
       marker->colors.push_back(getVertexColor(mesh, color_mode, i));

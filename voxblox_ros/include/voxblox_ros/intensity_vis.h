@@ -4,7 +4,7 @@
 #include <memory>
 
 #include <voxblox/utils/color_maps.h>
-#include <voxblox_msgs/msg/mesh.h>
+#include <voxblox_msgs/msg/mesh.hpp>
 
 #include "voxblox_ros/conversions.h"
 #include "voxblox_ros/mesh_vis.h"

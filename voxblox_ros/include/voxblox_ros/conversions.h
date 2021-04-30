@@ -13,7 +13,7 @@
 #include <voxblox/core/layer.h>
 #include <voxblox/mesh/mesh.h>
 #include <voxblox/utils/color_maps.h>
-#include <voxblox_msgs/msg/layer.h>
+#include <voxblox_msgs/msg/layer.hpp>
 
 namespace voxblox {
 
