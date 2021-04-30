@@ -6,7 +6,7 @@
 #include <vector>
 
 #include <pcl/point_types.h>
-#include <pcl_ros/point_cloud.h>
+#include <sensor_msgs/msg/point_cloud.h>
 #include <std_msgs/ColorRGBA.h>
 
 #include <voxblox/core/common.h>

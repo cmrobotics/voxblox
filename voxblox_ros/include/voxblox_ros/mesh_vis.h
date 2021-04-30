@@ -27,8 +27,8 @@
 #include <algorithm>
 #include <limits>
 
-#include <eigen3/Eigen_conversions/eigen_msg.h>
-#include <visualization_msgs/Marker.h>
+#include <tf2_eigen_kdl/tf2_eigen_kdl.hpp>
+#include <visualization_msgs/msg/dds_connext/Marker_.h>
 
 #include <voxblox/core/common.h>
 #include <voxblox/integrator/esdf_integrator.h>

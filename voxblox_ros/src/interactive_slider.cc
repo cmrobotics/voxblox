@@ -1,7 +1,7 @@
 #include "voxblox_ros/interactive_slider.h"
 
 #include <visualization_msgs/InteractiveMarker.h>
-#include <visualization_msgs/Marker.h>
+#include <visualization_msgs/msg/dds_connext/Marker_.h>
 
 namespace voxblox {
 

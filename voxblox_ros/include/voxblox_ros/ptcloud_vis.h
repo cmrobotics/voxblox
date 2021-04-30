@@ -4,11 +4,11 @@
 #include <algorithm>
 #include <string>
 
-#include <eigen3/Eigen_conversions/eigen_msg.h>
+#include <tf2_eigen_kdl/tf2_eigen_kdl.hpp>
 #include <pcl/point_types.h>
-#include <pcl_ros/point_cloud.h>
-#include <visualization_msgs/Marker.h>
-#include <visualization_msgs/MarkerArray.h>
+#include <sensor_msgs/msg/point_cloud.h>
+#include <visualization_msgs/msg/dds_connext/Marker_.h>
+#include <visualization_msgs/msg/dds_connext/MarkerArray_.h>
 
 #include <voxblox/core/common.h>
 #include <voxblox/core/layer.h>
