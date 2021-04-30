@@ -4,7 +4,7 @@
 #include <memory>
 
 #include <rviz_common/message_filter_display.h>
-#include <voxblox_msgs/msg/mesh.h>
+#include <voxblox_msgs/msg/mesh.hpp>
 
 #include "voxblox_rviz_plugin/voxblox_mesh_visual.h"
 

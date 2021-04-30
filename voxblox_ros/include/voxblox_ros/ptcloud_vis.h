@@ -7,8 +7,8 @@
 #include <tf2_eigen_kdl/tf2_eigen_kdl.hpp>
 #include <pcl/point_types.h>
 #include <sensor_msgs/msg/point_cloud.h>
-#include <visualization_msgs/msg/marker.h>
-#include <visualization_msgs/msg/marker_array.h>
+#include <visualization_msgs/msg/marker.hpp>
+#include <visualization_msgs/msg/marker_array.hpp>
 
 #include <voxblox/core/common.h>
 #include <voxblox/core/layer.h>
@@ -159,7 +159,7 @@ void createOccupancyBlocksFromLayer(
          ++linear_index) {
       Point coord = block.computeCoordinatesFromLinearIndex(linear_index);
       if (vis_function(block.getVoxelByLinearIndex(linear_index), coord)) {
-        geometry_msgs::Point cube_center;
+        geometry_msgs::msg::Point cube_center;
         cube_center.x = coord.x();
         cube_center.y = coord.y();
         cube_center.z = coord.z();
