@@ -10,6 +10,7 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(PCL REQUIRED)
 find_package(voxblox REQUIRED)
+find_package(voxblox_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 
 if(NOT CMAKE_CXX_STANDARD)
@@ -19,6 +20,7 @@ endif()
 set(dependencies
     rclcpp
     rclcpp_action
+    voxblox_msgs
 )
 
 #############

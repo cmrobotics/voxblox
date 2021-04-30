@@ -3,7 +3,7 @@
 #include <OGRE/OgreSceneManager.h>
 #include <OGRE/OgreSceneNode.h>
 
-#include <tf/transform_listener.h>
+#include <tf2_ros/transform_listener.h>
 
 #include <rviz/frame_manager.h>
 #include <rviz/visualization_manager.h>
