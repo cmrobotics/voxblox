@@ -102,7 +102,6 @@ void Block<OccupancyVoxel>::deserializeFromIntegers(
     const uint32_t bytes_2 = data[data_idx + 1u];
 
     OccupancyVoxel& voxel = voxels_[voxel_idx];
-
     memcpy(&(voxel.probability_log), &bytes_1, sizeof(bytes_1));
     voxel.observed = static_cast<bool>(bytes_2 & 0x000000FF);
   }
@@ -131,7 +130,7 @@ void Block<EsdfVoxel>::deserializeFromIntegers(
     voxel.hallucinated = static_cast<bool>((bytes_2 & 0x00000002));
     voxel.in_queue = static_cast<bool>((bytes_2 & 0x00000004));
     voxel.fixed = static_cast<bool>((bytes_2 & 0x00000008));
-
+    
     voxel.parent = deserializeDirection(bytes_2);
   }
 }

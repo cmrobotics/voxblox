@@ -48,7 +48,7 @@ void EsdfServer::setupRos() {
       "traversable", 1, true);
 
   esdf_map_pub_ =
-      nh_private_.advertise<voxblox_msgs::Layer>("esdf_map_out", 1, false);
+      nh_private_.advertise<voxblox_msgs::msg::Layer>("esdf_map_out", 1, false);
 
   // Set up subscriber.
   esdf_map_sub_ = nh_private_.subscribe("esdf_map_in", 1,
@@ -102,8 +102,8 @@ void EsdfServer::publishSlices() {
 }
 
 bool EsdfServer::generateEsdfCallback(
-    std_srvs::Empty::Request& /*request*/,      // NOLINT
-    std_srvs::Empty::Response& /*response*/) {  // NOLINT
+    std_srvs::srv::Empty::Request& /*request*/,      // NOLINT
+    std_srvs::srv::Empty::Response& /*response*/) {  // NOLINT
   const bool clear_esdf = true;
   if (clear_esdf) {
     esdf_integrator_->updateFromTsdfLayerBatch();
@@ -156,7 +156,7 @@ void EsdfServer::publishMap(bool reset_remote_map) {
     }
     const bool only_updated = !reset_remote_map;
     timing::Timer publish_map_timer("map/publish_esdf");
-    voxblox_msgs::Layer layer_msg;
+    voxblox_msgs::msg::Layer layer_msg;
     serializeLayerAsMsg<EsdfVoxel>(this->esdf_map_->getEsdfLayer(),
                                    only_updated, &layer_msg);
     if (reset_remote_map) {
@@ -230,7 +230,7 @@ void EsdfServer::newPoseCallback(const Transformation& T_G_C) {
   block_remove_timer.Stop();
 }
 
-void EsdfServer::esdfMapCallback(const voxblox_msgs::Layer& layer_msg) {
+void EsdfServer::esdfMapCallback(const voxblox_msgs::msg::Layer& layer_msg) {
   timing::Timer receive_map_timer("map/receive_esdf");
 
   bool success =

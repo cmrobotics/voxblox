@@ -49,7 +49,7 @@ TsdfServer::TsdfServer(const ros::NodeHandle& nh,
       nh_private_.advertise<pcl::PointCloud<pcl::PointXYZI> >("tsdf_pointcloud",
                                                               1, true);
   occupancy_marker_pub_ =
-      nh_private_.advertise<visualization_msgs::MarkerArray>("occupied_nodes",
+      nh_private_.advertise<visualization_msgs::msg::MarkerArray>("occupied_nodes",
                                                              1, true);
   tsdf_slice_pub_ = nh_private_.advertise<pcl::PointCloud<pcl::PointXYZI> >(
       "tsdf_slice", 1, true);
@@ -59,12 +59,12 @@ TsdfServer::TsdfServer(const ros::NodeHandle& nh,
   pointcloud_sub_ = nh_.subscribe("pointcloud", pointcloud_queue_size_,
                                   &TsdfServer::insertPointcloud, this);
 
-  mesh_pub_ = nh_private_.advertise<voxblox_msgs::Mesh>("mesh", 1, true);
+  mesh_pub_ = nh_private_.advertise<voxblox_msgs::msg::Mesh>("mesh", 1, true);
 
   // Publishing/subscribing to a layer from another node (when using this as
   // a library, for example within a planner).
   tsdf_map_pub_ =
-      nh_private_.advertise<voxblox_msgs::Layer>("tsdf_map_out", 1, false);
+      nh_private_.advertise<voxblox_msgs::msg::Layer>("tsdf_map_out", 1, false);
   tsdf_map_sub_ = nh_private_.subscribe("tsdf_map_in", 1,
                                         &TsdfServer::tsdfMapCallback, this);
   nh_private_.param("publish_tsdf_map", publish_tsdf_map_, publish_tsdf_map_);
@@ -437,7 +437,7 @@ void TsdfServer::publishTsdfSurfacePoints() {
 
 void TsdfServer::publishTsdfOccupiedNodes() {
   // Create a pointcloud with distance = intensity.
-  visualization_msgs::MarkerArray marker_array;
+  visualization_msgs::msg::MarkerArray marker_array;
   createOccupancyBlocksFromTsdfLayer(tsdf_map_->getTsdfLayer(), world_frame_,
                                      &marker_array);
   occupancy_marker_pub_.publish(marker_array);
@@ -467,7 +467,7 @@ void TsdfServer::publishMap(bool reset_remote_map) {
     }
     const bool only_updated = !reset_remote_map;
     timing::Timer publish_map_timer("map/publish_tsdf");
-    voxblox_msgs::Layer layer_msg;
+    voxblox_msgs::msg::Layer layer_msg;
     serializeLayerAsMsg<TsdfVoxel>(this->tsdf_map_->getTsdfLayer(),
                                    only_updated, &layer_msg);
     if (reset_remote_map) {
@@ -503,7 +503,7 @@ void TsdfServer::updateMesh() {
 
   timing::Timer publish_mesh_timer("mesh/publish");
 
-  voxblox_msgs::Mesh mesh_msg;
+  voxblox_msgs::msg::Mesh mesh_msg;
   generateVoxbloxMeshMsg(mesh_layer_, color_mode_, &mesh_msg);
   mesh_msg.header.frame_id = world_frame_;
   mesh_pub_.publish(mesh_msg);
@@ -536,7 +536,7 @@ bool TsdfServer::generateMesh() {
   generate_mesh_timer.Stop();
 
   timing::Timer publish_mesh_timer("mesh/publish");
-  voxblox_msgs::Mesh mesh_msg;
+  voxblox_msgs::msg::Mesh mesh_msg;
   generateVoxbloxMeshMsg(mesh_layer_, color_mode_, &mesh_msg);
   mesh_msg.header.frame_id = world_frame_;
   mesh_pub_.publish(mesh_msg);
@@ -577,41 +577,41 @@ bool TsdfServer::loadMap(const std::string& file_path) {
   return success;
 }
 
-bool TsdfServer::clearMapCallback(std_srvs::Empty::Request& /*request*/,
-                                  std_srvs::Empty::Response&
+bool TsdfServer::clearMapCallback(std_srvs::srv::Empty::Request& /*request*/,
+                                  std_srvs::srv::Empty::Response&
                                   /*response*/) {  // NOLINT
   clear();
   return true;
 }
 
-bool TsdfServer::generateMeshCallback(std_srvs::Empty::Request& /*request*/,
-                                      std_srvs::Empty::Response&
+bool TsdfServer::generateMeshCallback(std_srvs::srv::Empty::Request& /*request*/,
+                                      std_srvs::srv::Empty::Response&
                                       /*response*/) {  // NOLINT
   return generateMesh();
 }
 
-bool TsdfServer::saveMapCallback(voxblox_msgs::FilePath::Request& request,
-                                 voxblox_msgs::FilePath::Response&
+bool TsdfServer::saveMapCallback(voxblox_msgs::srv::FilePath::Request& request,
+                                 voxblox_msgs::srv::FilePath::Response&
                                  /*response*/) {  // NOLINT
   return saveMap(request.file_path);
 }
 
-bool TsdfServer::loadMapCallback(voxblox_msgs::FilePath::Request& request,
-                                 voxblox_msgs::FilePath::Response&
+bool TsdfServer::loadMapCallback(voxblox_msgs::srv::FilePath::Request& request,
+                                 voxblox_msgs::srv::FilePath::Response&
                                  /*response*/) {  // NOLINT
   bool success = loadMap(request.file_path);
   return success;
 }
 
 bool TsdfServer::publishPointcloudsCallback(
-    std_srvs::Empty::Request& /*request*/, std_srvs::Empty::Response&
+    std_srvs::srv::Empty::Request& /*request*/, std_srvs::srv::Empty::Response&
     /*response*/) {  // NOLINT
   publishPointclouds();
   return true;
 }
 
-bool TsdfServer::publishTsdfMapCallback(std_srvs::Empty::Request& /*request*/,
-                                        std_srvs::Empty::Response&
+bool TsdfServer::publishTsdfMapCallback(std_srvs::srv::Empty::Request& /*request*/,
+                                        std_srvs::srv::Empty::Response&
                                         /*response*/) {  // NOLINT
   publishMap();
   return true;
@@ -636,7 +636,7 @@ void TsdfServer::clear() {
   }
 }
 
-void TsdfServer::tsdfMapCallback(const voxblox_msgs::Layer& layer_msg) {
+void TsdfServer::tsdfMapCallback(const voxblox_msgs::msg::Layer& layer_msg) {
   timing::Timer receive_map_timer("map/receive_tsdf");
 
   bool success =

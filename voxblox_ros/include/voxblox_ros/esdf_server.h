@@ -25,8 +25,8 @@ class EsdfServer : public TsdfServer {
              const MeshIntegratorConfig& mesh_config);
   virtual ~EsdfServer() {}
 
-  bool generateEsdfCallback(std_srvs::Empty::Request& request,     // NOLINT
-                            std_srvs::Empty::Response& response);  // NOLINT
+  bool generateEsdfCallback(std_srvs::srv::Empty::Request& request,     // NOLINT
+                            std_srvs::srv::Empty::Response& response);  // NOLINT
 
   void publishAllUpdatedEsdfVoxels();
   virtual void publishSlices();
@@ -48,7 +48,7 @@ class EsdfServer : public TsdfServer {
   void updateEsdfBatch(bool full_euclidean = false);
 
   // Overwrites the layer with what's coming from the topic!
-  void esdfMapCallback(const voxblox_msgs::Layer& layer_msg);
+  void esdfMapCallback(const voxblox_msgs::msg::Layer& layer_msg);
 
   inline std::shared_ptr<EsdfMap> getEsdfMapPtr() { return esdf_map_; }
   inline std::shared_ptr<const EsdfMap> getEsdfMapPtr() const {

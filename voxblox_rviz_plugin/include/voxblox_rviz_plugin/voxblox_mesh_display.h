@@ -13,7 +13,7 @@ namespace voxblox_rviz_plugin {
 class VoxbloxMeshVisual;
 
 class VoxbloxMeshDisplay
-    : public rviz::MessageFilterDisplay<voxblox_msgs::Mesh> {
+    : public rviz::MessageFilterDisplay<voxblox_msgs::msg::Mesh> {
   Q_OBJECT
  public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -26,7 +26,7 @@ class VoxbloxMeshDisplay
   virtual void reset();
 
  private:
-  void processMessage(const voxblox_msgs::Mesh::ConstPtr& msg);
+  void processMessage(const voxblox_msgs::msg::Mesh::ConstPtr& msg);
 
   std::unique_ptr<VoxbloxMeshVisual> visual_;
 };

@@ -27,8 +27,8 @@ InteractiveSlider::InteractiveSlider(
       static_cast<double>(initial_position.z());
 
   // Create a marker.
-  visualization_msgs::Marker marker;
-  marker.type = visualization_msgs::Marker::CUBE;
+  visualization_msgs::msg::Marker marker;
+  marker.type = visualization_msgs::msg::Marker::CUBE;
   marker.scale.x = marker_scale_meters;
   marker.scale.y = marker_scale_meters;
   marker.scale.z = marker_scale_meters;

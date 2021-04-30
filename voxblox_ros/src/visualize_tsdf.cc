@@ -39,7 +39,7 @@ class SimpleTsdfVisualizer {
         nh_private_.advertise<pcl::PointCloud<pcl::PointXYZI>>(
             "all_tsdf_voxels", 1, true);
 
-    mesh_pub_ = nh_private_.advertise<voxblox_msgs::Mesh>("mesh", 1, true);
+    mesh_pub_ = nh_private_.advertise<voxblox_msgs::msg::Mesh>("mesh", 1, true);
 
     mesh_pointcloud_pub_ =
         nh_private_.advertise<pcl::PointCloud<pcl::PointXYZRGB>>(
@@ -149,7 +149,7 @@ void SimpleTsdfVisualizer::run(const Layer<TsdfVoxel>& tsdf_layer) {
     mesh_integrator->generateMesh(kOnlyMeshUpdatedBlocks, kClearUpdatedFlag);
 
     // Output as native voxblox mesh.
-    voxblox_msgs::Mesh mesh_msg;
+    voxblox_msgs::msg::Mesh mesh_msg;
     generateVoxbloxMeshMsg(mesh_layer, tsdf_mesh_color_mode_, &mesh_msg);
     mesh_msg.header.frame_id = tsdf_world_frame_;
     mesh_pub_.publish(mesh_msg);

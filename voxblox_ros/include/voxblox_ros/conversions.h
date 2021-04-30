@@ -147,7 +147,7 @@ inline void convertPointcloud(
 template <typename VoxelType>
 void serializeLayerAsMsg(
     const Layer<VoxelType>& layer, const bool only_updated,
-    voxblox_msgs::Layer* msg,
+    voxblox_msgs::msg::Layer* msg,
     const MapDerializationAction& action = MapDerializationAction::kUpdate);
 
 /**
@@ -157,11 +157,11 @@ void serializeLayerAsMsg(
  * message.
  */
 template <typename VoxelType>
-bool deserializeMsgToLayer(const voxblox_msgs::Layer& msg,
+bool deserializeMsgToLayer(const voxblox_msgs::msg::Layer& msg,
                            Layer<VoxelType>* layer);
 
 template <typename VoxelType>
-bool deserializeMsgToLayer(const voxblox_msgs::Layer& msg,
+bool deserializeMsgToLayer(const voxblox_msgs::msg::Layer& msg,
                            const MapDerializationAction& action,
                            Layer<VoxelType>* layer);
 

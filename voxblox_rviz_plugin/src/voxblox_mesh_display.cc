@@ -22,7 +22,7 @@ void VoxbloxMeshDisplay::reset() {
 }
 
 void VoxbloxMeshDisplay::processMessage(
-    const voxblox_msgs::Mesh::ConstPtr& msg) {
+    const voxblox_msgs::msg::Mesh::ConstPtr& msg) {
   // Here we call the rviz::FrameManager to get the transform from the
   // fixed frame to the frame in the header of this Imu message.  If
   // it fails, we can't do anything else so we return.
