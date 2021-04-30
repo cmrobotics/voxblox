@@ -9,6 +9,8 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(PCL REQUIRED)
+find_package(voxblox REQUIRED)
+find_package(OpenCV REQUIRED)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
@@ -26,7 +28,8 @@ set(dependencies
 include_directories(
   include
   ${PCL_INCLUDE_DIRS}
-  ${VOXBLOX_INCLUDE_DIRS}
+  ${voxblox_INCLUDE_DIRS}
+  ${voxblox_msgs_INCLUDE_DIRS}
 )
 
 add_library(esdf_server SHARED src/esdf_server.cc)
@@ -96,3 +99,6 @@ endif()
 ament_export_dependencies(${dependencies})
 
 ament_package()
+
+
+
