@@ -27,7 +27,7 @@
 #include <algorithm>
 #include <limits>
 
-#include <eigen_conversions/eigen_msg.h>
+#include <eigen3/Eigen_conversions/eigen_msg.h>
 #include <visualization_msgs/Marker.h>
 
 #include <voxblox/core/common.h>

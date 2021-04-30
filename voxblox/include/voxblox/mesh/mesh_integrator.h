@@ -31,7 +31,7 @@
 #include <vector>
 
 #include <glog/logging.h>
-#include <Eigen/Core>
+#include <eigen3/Eigen/Core>
 
 #include "voxblox/core/layer.h"
 #include "voxblox/core/voxel.h"
