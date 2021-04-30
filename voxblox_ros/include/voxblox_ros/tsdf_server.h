@@ -9,12 +9,12 @@
 #include <pcl/filters/filter.h>
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
-#include <pcl_ros/point_cloud.h>
+#include <sensor_msgs/msg/point_cloud.h>
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <std_srvs/Empty.h>
-#include <tf/transform_broadcaster.h>
-#include <visualization_msgs/MarkerArray.h>
+#include "tf2_ros/transform_broadcaster.h"
+#include <visualization_msgs/msg/dds_connext/MarkerArray_.h>
 
 #include <voxblox/alignment/icp.h>
 #include <voxblox/core/tsdf_map.h>

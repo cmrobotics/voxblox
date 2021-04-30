@@ -9,13 +9,13 @@
 #include <pcl/io/ply_io.h>
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
-#include <pcl_ros/point_cloud.h>
+#include <sensor_msgs/msg/point_cloud.h>
 #include <pcl_ros/transforms.h>
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <std_srvs/Empty.h>
 #include <tf2_ros/transform_listener.h>
-#include <visualization_msgs/MarkerArray.h>
+#include <visualization_msgs/msg/dds_connext/MarkerArray_.h>
 
 #include <voxblox/core/esdf_map.h>
 #include <voxblox/core/occupancy_map.h>
