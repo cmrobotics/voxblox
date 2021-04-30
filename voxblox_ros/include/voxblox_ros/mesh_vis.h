@@ -151,7 +151,7 @@ inline std_msgs::ColorRGBA getVertexColor(const Mesh::ConstPtr& mesh,
 }
 
 inline void generateVoxbloxMeshMsg(MeshLayer* mesh_layer, ColorMode color_mode,
-                                   voxblox_msgs::Mesh* mesh_msg) {
+                                   voxblox_msgs::msg::Mesh* mesh_msg) {
   CHECK_NOTNULL(mesh_msg);
   CHECK_NOTNULL(mesh_layer);
 
@@ -166,7 +166,7 @@ inline void generateVoxbloxMeshMsg(MeshLayer* mesh_layer, ColorMode color_mode,
   for (const BlockIndex& block_index : mesh_indices) {
     Mesh::Ptr mesh = mesh_layer->getMeshPtrByIndex(block_index);
 
-    voxblox_msgs::MeshBlock mesh_block;
+    voxblox_msgs::msg::MeshBlock mesh_block;
     mesh_block.index[0] = block_index.x();
     mesh_block.index[1] = block_index.y();
     mesh_block.index[2] = block_index.z();
@@ -231,7 +231,7 @@ inline void generateVoxbloxMeshMsg(MeshLayer* mesh_layer, ColorMode color_mode,
 
 inline void generateVoxbloxMeshMsg(const MeshLayer::Ptr& mesh_layer,
                                    ColorMode color_mode,
-                                   voxblox_msgs::Mesh* mesh_msg) {
+                                   voxblox_msgs::msg::Mesh* mesh_msg) {
   CHECK_NOTNULL(mesh_msg);
   CHECK(mesh_layer);
   generateVoxbloxMeshMsg(mesh_layer.get(), color_mode, mesh_msg);
@@ -239,7 +239,7 @@ inline void generateVoxbloxMeshMsg(const MeshLayer::Ptr& mesh_layer,
 
 inline void fillMarkerWithMesh(const MeshLayer::ConstPtr& mesh_layer,
                                ColorMode color_mode,
-                               visualization_msgs::Marker* marker) {
+                               visualization_msgs::msg::Marker* marker) {
   CHECK_NOTNULL(marker);
   marker->header.stamp = ros::Time::now();
   marker->ns = "mesh";
@@ -250,7 +250,7 @@ inline void fillMarkerWithMesh(const MeshLayer::ConstPtr& mesh_layer,
   marker->pose.orientation.y = 0;
   marker->pose.orientation.z = 0;
   marker->pose.orientation.w = 1;
-  marker->type = visualization_msgs::Marker::TRIANGLE_LIST;
+  marker->type = visualization_msgs::msg::Marker::TRIANGLE_LIST;
 
   BlockIndexList mesh_indices;
   mesh_layer->getAllAllocatedMeshes(&mesh_indices);

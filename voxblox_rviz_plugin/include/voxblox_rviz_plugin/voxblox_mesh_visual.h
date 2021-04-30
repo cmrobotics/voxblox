@@ -8,14 +8,14 @@
 
 namespace voxblox_rviz_plugin {
 
-/// Visualizes a single voxblox_msgs::Mesh message.
+/// Visualizes a single voxblox_msgs::msg::Mesh message.
 class VoxbloxMeshVisual {
  public:
   VoxbloxMeshVisual(Ogre::SceneManager* scene_manager,
                     Ogre::SceneNode* parent_node);
   virtual ~VoxbloxMeshVisual();
 
-  void setMessage(const voxblox_msgs::Mesh::ConstPtr& msg);
+  void setMessage(const voxblox_msgs::msg::Mesh::ConstPtr& msg);
 
   /// Set the coordinate frame pose.
   void setFramePosition(const Ogre::Vector3& position);

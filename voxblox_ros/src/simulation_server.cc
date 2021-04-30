@@ -134,7 +134,7 @@ SimulationServer::SimulationServer(
       "tsdf_gt", 1, true);
   esdf_gt_pub_ = nh_private_.advertise<pcl::PointCloud<pcl::PointXYZI> >(
       "esdf_gt", 1, true);
-  tsdf_gt_mesh_pub_ = nh_private_.advertise<visualization_msgs::MarkerArray>(
+  tsdf_gt_mesh_pub_ = nh_private_.advertise<visualization_msgs::msg::MarkerArray>(
       "tsdf_gt_mesh", 1, true);
 
   // Test
@@ -142,7 +142,7 @@ SimulationServer::SimulationServer(
       "tsdf_test", 1, true);
   esdf_test_pub_ = nh_private_.advertise<pcl::PointCloud<pcl::PointXYZI> >(
       "esdf_test", 1, true);
-  tsdf_test_mesh_pub_ = nh_private_.advertise<visualization_msgs::MarkerArray>(
+  tsdf_test_mesh_pub_ = nh_private_.advertise<visualization_msgs::msg::MarkerArray>(
       "tsdf_test_mesh", 1, true);
 
   view_ptcloud_pub_ = nh_private_.advertise<pcl::PointCloud<pcl::PointXYZRGB> >(
@@ -331,7 +331,7 @@ void SimulationServer::visualize() {
     constexpr bool clear_updated_flag = true;
     mesh_integrator.generateMesh(only_mesh_updated_blocks, clear_updated_flag);
 
-    visualization_msgs::MarkerArray marker_array;
+    visualization_msgs::msg::MarkerArray marker_array;
     marker_array.markers.resize(1);
     ColorMode color_mode = ColorMode::kNormals;
     fillMarkerWithMesh(mesh, color_mode, &marker_array.markers[0]);

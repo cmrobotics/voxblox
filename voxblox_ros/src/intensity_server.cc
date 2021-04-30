@@ -38,7 +38,7 @@ IntensityServer::IntensityServer(const ros::NodeHandle& nh,
       nh_private_.advertise<pcl::PointCloud<pcl::PointXYZI> >(
           "intensity_pointcloud", 1, true);
   intensity_mesh_pub_ =
-      nh_private_.advertise<voxblox_msgs::Mesh>("intensity_mesh", 1, true);
+      nh_private_.advertise<voxblox_msgs::msg::Mesh>("intensity_mesh", 1, true);
 
   color_map_.reset(new IronbowColorMap());
   color_map_->setMinValue(intensity_min_value);

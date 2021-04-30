@@ -29,7 +29,7 @@ The tsdf_server and esdf_server publish and subscribe to the following topics:
 Published Topics
 ----------------
 
-mesh ``voxblox_msgs::MeshBlock``
+mesh ``voxblox_msgs::msg::MeshBlock``
   A visualization topic showing the mesh produced from the tsdf in a form that can be seen in RViz. Set ``update_mesh_every_n_sec`` to control its update rate.
 surface_pointcloud ``pcl::PointCloud<pcl::PointXYZRGB>``
   A colored pointcloud of the voxels that are close to a surface.
@@ -45,11 +45,11 @@ esdf_pointcloud ``pcl::PointCloud<pcl::PointXYZI>``
   A pointcloud showing the values of all allocated ESDF voxels. Only appears if using ``esdf_server``.
 esdf_slice ``pcl::PointCloud<pcl::PointXYZI>``
   Outputs a 2D horizontal slice of the ESDF colored by the stored distance value. Only appears if using ``esdf_server``.
-occupied_nodes ``visualization_msgs::MarkerArray``
+occupied_nodes ``visualization_msgs::msg::MarkerArray``
   Visualizes the location of the allocated voxels in the TSDF.
-tsdf_map_out ``voxblox_msgs::Layer``
+tsdf_map_out ``voxblox_msgs::msg::Layer``
   Publishes the entire TSDF layer to update other nodes (that listen on tsdf_layer_in). Only published if ``publish_tsdf_map`` is set to true. Rate of publishing is controlled by ``publish_map_every_n_sec``.
-esdf_map_out ``voxblox_msgs::Layer``
+esdf_map_out ``voxblox_msgs::msg::Layer``
   Publishes the entire ESDF layer to update other nodes (that listen on esdf_layer_in). Only published if ``publish_esdf_map`` is set to true. Rate of publishing is controlled by ``publish_map_every_n_sec``.
 traversable ``pcl::PointCloud<pcl::PointXYZI>``
   (ESDF server only) Outputs all the points within the map that are considered traversable, controlled by the ``publish_traversable`` and ``traversability_radius`` parameters.
@@ -63,9 +63,9 @@ pointcloud ``sensor_msgs::PointCloud2``
   The input pointcloud to be integrated.
 freespace_pointcloud ``sensor_msgs::PointCLoud2``
   Only appears if ``use_freespace_pointcloud`` is true. Unlike the ``pointcloud`` topic where the given points lie on surfaces, the points in the ``freespace_pointcloud`` are taken to be floating in empty space. These points can assist in generating more complete freespace information in a map.
-tsdf_map_in ``voxblox_msgs::Layer``
+tsdf_map_in ``voxblox_msgs::msg::Layer``
   Replaces the current TSDF layer with that from this topic. Voxel size and voxels per side should match.
-esdf_map_in ``voxblox_msgs::Layer``
+esdf_map_in ``voxblox_msgs::msg::Layer``
   Replaces the current ESDF layer with that from this topic. Voxel size and voxels per side should match.
 icp_transform ``geometry_msgs::TransformStamped``
   If ICP is enabled, this is the current corrected transform between the world frame and the ICP frame.
@@ -80,9 +80,9 @@ generate_mesh
 generate_esdf
   This service has an empty request and response. It can be used to trigger an esdf map update.
 save_map
-  This service has a ``voxblox_msgs::FilePath::Request`` and ``voxblox_msgs::FilePath::Response``. The service call saves the tsdf layer to a .vxblx file.
+  This service has a ``voxblox_msgs::srv::FilePath::Request`` and ``voxblox_msgs::srv::FilePath::Response``. The service call saves the tsdf layer to a .vxblx file.
 load_map
-  This service has a ``voxblox_msgs::FilePath::Request`` and ``voxblox_msgs::FilePath::Response``. The service call loads the tsdf layer from a .vxblx file.
+  This service has a ``voxblox_msgs::srv::FilePath::Request`` and ``voxblox_msgs::srv::FilePath::Response``. The service call loads the tsdf layer from a .vxblx file.
 publish_map
   This service has an empty request and response. Publishes any TSDF and ESDF layers on the ``tsdf_map_out`` and ``esdf_map_out`` topics.
 publish_pointclouds
