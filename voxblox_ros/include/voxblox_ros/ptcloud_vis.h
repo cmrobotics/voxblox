@@ -6,7 +6,8 @@
 
 #include <tf2_eigen_kdl/tf2_eigen_kdl.hpp>
 #include <pcl/point_types.h>
-#include <sensor_msgs/msg/point_cloud.h>
+#include <pcl/point_cloud.h>
+#include <sensor_msgs/msg/point_cloud.hpp>
 #include <visualization_msgs/msg/marker.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 
