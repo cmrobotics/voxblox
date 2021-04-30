@@ -203,27 +203,45 @@ set("${PROJECT_NAME}_SRCS"
 
 
 include_directories(include)
-add_library (${PROJECT_NAME} ${${PROJECT_NAME}_SRCS})
-target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library (voxblox ${${PROJECT_NAME}_SRCS})
+target_include_directories(voxblox
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
 
-ament_export_targets(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
+ament_export_targets(export_voxblox HAS_LIBRARY_TARGET)
+
+
 
 install(
-  DIRECTORY include/
-  DESTINATION include
-)
-
-install(
-  TARGETS ${PROJECT_NAME}
-  EXPORT export_${PROJECT_NAME}
+  TARGETS voxblox
+  EXPORT export_voxblox
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
   RUNTIME DESTINATION bin
   INCLUDES DESTINATION include
 )
 
+install(
+  DIRECTORY include/
+  DESTINATION include/
+)
+
+#install(DIRECTORY voxblox DESTINATION share/${PROJECT_NAME})
+
+
+#if(BUILD_TESTING)
+#  find_package(ament_lint_auto REQUIRED)
+#  ament_lint_auto_find_test_dependencies()
+#endif()
+
 ament_export_include_directories(include)
-ament_export_libraries(${PROJECT_NAME})
+ament_export_libraries(voxblox)
+#ament_export_dependencies(${dependencies})
+ament_package()
+
+
+
 
 #
 #if(BUILD_TESTING)
