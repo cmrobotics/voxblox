@@ -28,7 +28,7 @@
 #include <limits>
 
 #include <tf2_eigen_kdl/tf2_eigen_kdl.hpp>
-#include <visualization_msgs/msg/dds_connext/Marker_.h>
+#include <visualization_msgs/msg/marker.h>
 
 #include <voxblox/core/common.h>
 #include <voxblox/integrator/esdf_integrator.h>
