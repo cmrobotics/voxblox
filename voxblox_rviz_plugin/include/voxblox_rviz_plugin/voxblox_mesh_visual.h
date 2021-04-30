@@ -4,7 +4,7 @@
 #include <OGRE/OgreManualObject.h>
 
 #include <voxblox/core/block_hash.h>
-#include <voxblox_msgs/Mesh.h>
+#include <voxblox_msgs/msg/mesh.h>
 
 namespace voxblox_rviz_plugin {
 

@@ -35,7 +35,7 @@
 #include <voxblox/integrator/tsdf_integrator.h>
 #include <voxblox/mesh/mesh.h>
 #include <voxblox/mesh/mesh_layer.h>
-#include <voxblox_msgs/Mesh.h>
+#include <voxblox_msgs/msg/mesh.h>
 
 #include "voxblox_ros/conversions.h"
 

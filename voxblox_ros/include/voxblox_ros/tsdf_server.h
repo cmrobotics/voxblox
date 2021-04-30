@@ -23,8 +23,8 @@
 #include <voxblox/io/mesh_ply.h>
 #include <voxblox/mesh/mesh_integrator.h>
 #include <voxblox/utils/color_maps.h>
-#include <voxblox_msgs/FilePath.h>
-#include <voxblox_msgs/Mesh.h>
+#include <voxblox_msgs/srv/file_path.h>
+#include <voxblox_msgs/msg/mesh.h>
 
 #include "voxblox_ros/mesh_vis.h"
 #include "voxblox_ros/ptcloud_vis.h"
