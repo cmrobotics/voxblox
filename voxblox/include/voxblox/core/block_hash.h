@@ -6,7 +6,7 @@
 #include <unordered_set>
 #include <utility>
 
-#include <Eigen/Core>
+#include <eigen3/Eigen/Core>
 
 #include "voxblox/core/common.h"
 

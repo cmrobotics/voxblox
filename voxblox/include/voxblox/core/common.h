@@ -14,7 +14,7 @@
 
 #include <glog/logging.h>
 #include <kindr/minimal/quat-transformation.h>
-#include <Eigen/Core>
+#include <eigen3/Eigen/Core>
 
 namespace voxblox {
 

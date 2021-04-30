@@ -5,7 +5,7 @@
 #include <vector>
 
 #include <glog/logging.h>
-#include <Eigen/Core>
+#include <eigen3/Eigen/Core>
 
 #include "voxblox/core/block_hash.h"
 #include "voxblox/core/layer.h"

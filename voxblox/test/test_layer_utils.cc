@@ -1,4 +1,4 @@
-#include <eigen-checks/gtest.h>
+#include <eigen3/Eigen-checks/gtest.h>
 #include <gtest/gtest.h>
 
 #include "voxblox/core/block.h"

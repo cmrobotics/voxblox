@@ -3,7 +3,7 @@
 
 #include <utility>
 
-#include <Eigen/Core>
+#include <eigen3/Eigen/Core>
 
 #include "voxblox/core/common.h"
 #include "voxblox/core/layer.h"
