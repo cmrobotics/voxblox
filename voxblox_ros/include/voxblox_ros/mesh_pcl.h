@@ -30,7 +30,7 @@
 
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
-#include <sensor_msgs/msg/point_cloud.h>
+#include <sensor_msgs/msg/point_cloud.hpp>
 
 #include <voxblox/core/common.h>
 #include <voxblox/mesh/mesh_layer.h>

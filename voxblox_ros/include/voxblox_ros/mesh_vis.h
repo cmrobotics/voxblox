@@ -28,7 +28,7 @@
 #include <limits>
 
 #include <tf2_eigen_kdl/tf2_eigen_kdl.hpp>
-#include <visualization_msgs/msg/marker.h>
+#include <visualization_msgs/msg/marker.hpp>
 
 #include <voxblox/core/common.h>
 #include <voxblox/integrator/esdf_integrator.h>
@@ -272,7 +272,7 @@ inline void fillMarkerWithMesh(const MeshLayer::ConstPtr& mesh_layer,
 
     for (size_t i = 0u; i < mesh->vertices.size(); i++) {
       geometry_msgs::msg::Point point_msg;
-      tf::pointEigenToMsg(mesh->vertices[i].cast<double>(), point_msg);
+      tf2::pointEigenToMsg(mesh->vertices[i].cast<double>(), point_msg);
       marker->points.push_back(point_msg);
       marker->colors.push_back(getVertexColor(mesh, color_mode, i));
     }

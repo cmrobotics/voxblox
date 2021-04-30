@@ -9,12 +9,12 @@
 #include <pcl/filters/filter.h>
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
-#include <sensor_msgs/msg/point_cloud.h>
+#include <sensor_msgs/msg/point_cloud.hpp>
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <std_srvs/Empty.h>
 #include "tf2_ros/transform_broadcaster.h"
-#include <visualization_msgs/msg/marker_array.h>
+#include <visualization_msgs/msg/marker_array.hpp>
 
 #include <voxblox/alignment/icp.h>
 #include <voxblox/core/tsdf_map.h>
@@ -158,7 +158,7 @@ class TsdfServer {
   ros::ServiceServer publish_tsdf_map_srv_;
 
   /// Tools for broadcasting TFs.
-  tf::TransformBroadcaster tf_broadcaster_;
+  tf2::TransformBroadcaster tf_broadcaster_;
 
   // Timers.
   ros::Timer update_mesh_timer_;

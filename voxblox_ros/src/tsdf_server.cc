@@ -276,19 +276,19 @@ void TsdfServer::processPointCloudMessageAndInsert(
     }
 
     // Publish transforms as both TF and message.
-    tf::Transform icp_tf_msg, pose_tf_msg;
+    tf2::Transform icp_tf_msg, pose_tf_msg;
     geometry_msgs::TransformStamped transform_msg;
 
-    tf::transformKindrToTF(icp_corrected_transform_.cast<double>(),
+    tf2::transformKindrToTF(icp_corrected_transform_.cast<double>(),
                            &icp_tf_msg);
-    tf::transformKindrToTF(T_G_C.cast<double>(), &pose_tf_msg);
-    tf::transformKindrToMsg(icp_corrected_transform_.cast<double>(),
+    tf2::transformKindrToTF(T_G_C.cast<double>(), &pose_tf_msg);
+    tf2::transformKindrToMsg(icp_corrected_transform_.cast<double>(),
                             &transform_msg.transform);
     tf_broadcaster_.sendTransform(
-        tf::StampedTransform(icp_tf_msg, pointcloud_msg->header.stamp,
+        tf2::StampedTransform(icp_tf_msg, pointcloud_msg->header.stamp,
                              world_frame_, icp_corrected_frame_));
     tf_broadcaster_.sendTransform(
-        tf::StampedTransform(pose_tf_msg, pointcloud_msg->header.stamp,
+        tf2::StampedTransform(pose_tf_msg, pointcloud_msg->header.stamp,
                              icp_corrected_frame_, pose_corrected_frame_));
 
     transform_msg.header.frame_id = world_frame_;

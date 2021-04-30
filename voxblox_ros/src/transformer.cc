@@ -89,7 +89,7 @@ bool Transformer::lookupTransformTf(const std::string& from_frame,
                                     const ros::Time& timestamp,
                                     Transformation* transform) {
   CHECK_NOTNULL(transform);
-  tf::StampedTransform tf_transform;
+  tf2::StampedTransform tf_transform;
   ros::Time time_to_lookup = timestamp;
 
   // Allow overwriting the TF frame for the sensor.
@@ -108,13 +108,13 @@ bool Transformer::lookupTransformTf(const std::string& from_frame,
   try {
     tf_listener_.lookupTransform(to_frame, from_frame_modified, time_to_lookup,
                                  tf_transform);
-  } catch (tf::TransformException& ex) {  // NOLINT
+  } catch (tf2::TransformException& ex) {  // NOLINT
     ROS_ERROR_STREAM(
         "Error getting TF transform from sensor data: " << ex.what());
     return false;
   }
 
-  tf::transformTFToKindr(tf_transform, transform);
+  tf2::transformTFToKindr(tf_transform, transform);
   return true;
 }
 
@@ -150,7 +150,7 @@ bool Transformer::lookupTransformQueue(const ros::Time& timestamp,
   // Match found basically means an exact match.
   Transformation T_G_D;
   if (match_found) {
-    tf::transformMsgToKindr(it->transform, &T_G_D);
+    tf2::transformMsgToKindr(it->transform, &T_G_D);
   } else {
     // If we think we have an inexact match, have to check that we're still
     // within bounds and interpolate.
@@ -165,12 +165,12 @@ bool Transformer::lookupTransformQueue(const ros::Time& timestamp,
     // Newest should be 1 past the requested timestamp, oldest should be one
     // before the requested timestamp.
     Transformation T_G_D_newest;
-    tf::transformMsgToKindr(it->transform, &T_G_D_newest);
+    tf2::transformMsgToKindr(it->transform, &T_G_D_newest);
     int64_t offset_newest_ns = (it->header.stamp - timestamp).toNSec();
     // We already checked that this is not the beginning.
     it--;
     Transformation T_G_D_oldest;
-    tf::transformMsgToKindr(it->transform, &T_G_D_oldest);
+    tf2::transformMsgToKindr(it->transform, &T_G_D_oldest);
     int64_t offset_oldest_ns = (timestamp - it->header.stamp).toNSec();
 
     // Interpolate between the two transformations using the exponential map.
