@@ -29,11 +29,11 @@ class IntensityServer : public TsdfServer {
 
  protected:
   /// Subscriber for intensity images.
-  ros::Subscriber intensity_image_sub_;
+  rclcpp::Subscriber intensity_image_sub_;
 
   // Publish markers for visualization.
-  ros::Publisher intensity_pointcloud_pub_;
-  ros::Publisher intensity_mesh_pub_;
+  rclcpp::Publisher intensity_pointcloud_pub_;
+  rclcpp::Publisher intensity_mesh_pub_;
 
   /// Parameters of the incoming UNDISTORTED intensity images.
   double focal_length_px_;

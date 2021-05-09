@@ -73,7 +73,7 @@ TsdfServer::TsdfServer(const TsdfMap::Config& config,
   }
 
   if (enable_icp_) {
-    icp_transform_pub_ = nh_private_.advertise<geometry_msgs::TransformStamped>(
+    icp_transform_pub_ = nh_private_.advertise<geometry_msgs::msg::TransformStamped>(
         "icp_transform", 1, true);
     nh_private_.param("icp_corrected_frame", icp_corrected_frame_,
                       icp_corrected_frame_);
@@ -142,7 +142,7 @@ TsdfServer::TsdfServer(const TsdfMap::Config& config,
                                 &TsdfServer::publishMapEvent, this);
   }
 }
-
+/*
 void TsdfServer::getServerConfigFromRosParam(
     const ros::NodeHandle& nh_private) {
   // Before subscribing, determine minimum time between messages.
@@ -203,10 +203,10 @@ void TsdfServer::getServerConfigFromRosParam(
     ROS_ERROR_STREAM("Invalid color map: " << intensity_colormap);
   }
   color_map_->setMaxValue(intensity_max_value);
-}
+}*/
 
 void TsdfServer::processPointCloudMessageAndInsert(
-    const sensor_msgs::PointCloud2::Ptr& pointcloud_msg,
+    const sensor_msgs::msg::PointCloud2::Ptr& pointcloud_msg,
     const Transformation& T_G_C, const bool is_freespace_pointcloud) {
   // Convert the PCL pointcloud into our awesome format.
 
@@ -272,7 +272,7 @@ void TsdfServer::processPointCloudMessageAndInsert(
 
     // Publish transforms as both TF and message.
     tf2::Transform icp_tf_msg, pose_tf_msg;
-    geometry_msgs::TransformStamped transform_msg;
+    geometry_msgs::msg::TransformStamped transform_msg;
 
     tf2::transformKindrToTF(icp_corrected_transform_.cast<double>(),
                            &icp_tf_msg);
@@ -319,8 +319,8 @@ void TsdfServer::processPointCloudMessageAndInsert(
 
 // Checks if we can get the next message from queue.
 bool TsdfServer::getNextPointcloudFromQueue(
-    std::queue<sensor_msgs::PointCloud2::Ptr>* queue,
-    sensor_msgs::PointCloud2::Ptr* pointcloud_msg, Transformation* T_G_C) {
+    std::queue<sensor_msgs::msg::PointCloud2::Ptr>* queue,
+    sensor_msgs::msg::PointCloud2::Ptr* pointcloud_msg, Transformation* T_G_C) {
   const size_t kMaxQueueSize = 10;
   if (queue->empty()) {
     return false;
@@ -346,7 +346,7 @@ bool TsdfServer::getNextPointcloudFromQueue(
 }
 
 void TsdfServer::insertPointcloud(
-    const sensor_msgs::PointCloud2::Ptr& pointcloud_msg_in) {
+    const sensor_msgs::msg::PointCloud2::Ptr& pointcloud_msg_in) {
   if (pointcloud_msg_in->header.stamp - last_msg_time_ptcloud_ >
       min_time_between_msgs_) {
     last_msg_time_ptcloud_ = pointcloud_msg_in->header.stamp;
@@ -355,7 +355,7 @@ void TsdfServer::insertPointcloud(
   }
 
   Transformation T_G_C;
-  sensor_msgs::PointCloud2::Ptr pointcloud_msg;
+  sensor_msgs::msg::PointCloud2::Ptr pointcloud_msg;
   bool processed_any = false;
   while (
       getNextPointcloudFromQueue(&pointcloud_queue_, &pointcloud_msg, &T_G_C)) {
@@ -381,7 +381,7 @@ void TsdfServer::insertPointcloud(
 }
 
 void TsdfServer::insertFreespacePointcloud(
-    const sensor_msgs::PointCloud2::Ptr& pointcloud_msg_in) {
+    const sensor_msgs::msg::PointCloud2::Ptr& pointcloud_msg_in) {
   if (pointcloud_msg_in->header.stamp - last_msg_time_freespace_ptcloud_ >
       min_time_between_msgs_) {
     last_msg_time_freespace_ptcloud_ = pointcloud_msg_in->header.stamp;
@@ -390,7 +390,7 @@ void TsdfServer::insertFreespacePointcloud(
   }
 
   Transformation T_G_C;
-  sensor_msgs::PointCloud2::Ptr pointcloud_msg;
+  sensor_msgs::msg::PointCloud2::Ptr pointcloud_msg;
   while (getNextPointcloudFromQueue(&freespace_pointcloud_queue_,
                                     &pointcloud_msg, &T_G_C)) {
     constexpr bool is_freespace_pointcloud = true;

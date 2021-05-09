@@ -61,14 +61,14 @@ class SimulationServer {
   ros::NodeHandle nh_private_;
 
   // A bunch of publishers :)
-  ros::Publisher sim_pub_;
-  ros::Publisher tsdf_gt_pub_;
-  ros::Publisher esdf_gt_pub_;
-  ros::Publisher tsdf_gt_mesh_pub_;
-  ros::Publisher tsdf_test_pub_;
-  ros::Publisher esdf_test_pub_;
-  ros::Publisher tsdf_test_mesh_pub_;
-  ros::Publisher view_ptcloud_pub_;
+  rclcpp::Publisher sim_pub_;
+  rclcpp::Publisher tsdf_gt_pub_;
+  rclcpp::Publisher esdf_gt_pub_;
+  rclcpp::Publisher tsdf_gt_mesh_pub_;
+  rclcpp::Publisher tsdf_test_pub_;
+  rclcpp::Publisher esdf_test_pub_;
+  rclcpp::Publisher tsdf_test_mesh_pub_;
+  rclcpp::Publisher view_ptcloud_pub_;
 
   // Settings
   FloatingPoint voxel_size_;

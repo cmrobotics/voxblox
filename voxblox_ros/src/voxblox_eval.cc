@@ -62,8 +62,8 @@ class VoxbloxEvaluator {
   Transformation T_V_G_;
 
   // Visualization publishers.
-  ros::Publisher mesh_pub_;
-  ros::Publisher gt_ptcloud_pub_;
+  rclcpp::Publisher mesh_pub_;
+  rclcpp::Publisher gt_ptcloud_pub_;
 
   // Core data to compare.
   std::shared_ptr<Layer<TsdfVoxel>> tsdf_layer_;

@@ -6,11 +6,8 @@
 
 namespace voxblox {
 
-Transformer::Transformer(const ros::NodeHandle& nh,
-                         const ros::NodeHandle& nh_private)
-    : nh_(nh),
-      nh_private_(nh_private),
-      world_frame_("world"),
+Transformer::Transformer()
+    : world_frame_("world"),
       sensor_frame_(""),
       use_tf_transforms_(true),
       timestamp_tolerance_ns_(1000000) {
@@ -67,7 +64,7 @@ Transformer::Transformer(const ros::NodeHandle& nh,
 }
 
 void Transformer::transformCallback(
-    const geometry_msgs::TransformStamped& transform_msg) {
+    const geometry_msgs::msg::TransformStamped& transform_msg) {
   transform_queue_.push_back(transform_msg);
 }
 
@@ -129,7 +126,7 @@ bool Transformer::lookupTransformQueue(const ros::Time& timestamp,
   }
   // Try to match the transforms in the queue.
   bool match_found = false;
-  std::deque<geometry_msgs::TransformStamped>::iterator it =
+  std::deque<geometry_msgs::msg::TransformStamped>::iterator it =
       transform_queue_.begin();
   for (; it != transform_queue_.end(); ++it) {
     // If the current transform is newer than the requested timestamp, we need

@@ -79,18 +79,18 @@ class EsdfServer : public TsdfServer {
   void setupRos();
 
   /// Publish markers for visualization.
-  ros::Publisher esdf_pointcloud_pub_;
-  ros::Publisher esdf_slice_pub_;
-  ros::Publisher traversable_pub_;
+  rclcpp::Publisher esdf_pointcloud_pub_;
+  rclcpp::Publisher esdf_slice_pub_;
+  rclcpp::Publisher traversable_pub_;
 
   /// Publish the complete map for other nodes to consume.
-  ros::Publisher esdf_map_pub_;
+  rclcpp::Publisher esdf_map_pub_;
 
   /// Subscriber to subscribe to another node generating the map.
-  ros::Subscriber esdf_map_sub_;
+  rclcpp::Subscriber esdf_map_sub_;
 
   /// Services.
-  ros::ServiceServer generate_esdf_srv_;
+  rclcpp::Service generate_esdf_srv_;
 
   /// Timers.
   ros::Timer update_esdf_timer_;
