@@ -77,7 +77,7 @@ inline Point lambertShading(const Point& normal, const Point& light,
 
 inline void lambertColorFromColorAndNormal(const Color& color,
                                            const Point& normal,
-                                           std_msgs::ColorRGBA* color_msg) {
+                                           std_msgs::msg::ColorRGBA* color_msg) {
   // These are just some arbitrary light directions, I believe taken from
   // OpenChisel.
   const Point light_dir = Point(0.8f, -0.2f, 0.7f).normalized();
@@ -95,12 +95,12 @@ inline void lambertColorFromColorAndNormal(const Color& color,
 }
 
 inline void lambertColorFromNormal(const Point& normal,
-                                   std_msgs::ColorRGBA* color_msg) {
+                                   std_msgs::msg::ColorRGBA* color_msg) {
   lambertColorFromColorAndNormal(Color(127, 127, 127), normal, color_msg);
 }
 
 inline void normalColorFromNormal(const Point& normal,
-                                  std_msgs::ColorRGBA* color_msg) {
+                                  std_msgs::msg::ColorRGBA* color_msg) {
   // Normals should be in the scale -1 to 1, so we need to shift them to
   // 0 -> 1 range.
   color_msg->r = normal.x() * 0.5 + 0.5;
@@ -110,7 +110,7 @@ inline void normalColorFromNormal(const Point& normal,
 }
 
 inline void heightColorFromVertex(const Point& vertex,
-                                  std_msgs::ColorRGBA* color_msg) {
+                                  std_msgs::msg::ColorRGBA* color_msg) {
   // TODO(helenol): figure out a nicer way to do this without hard-coded
   // constants.
   const double min_z = -1;
@@ -121,10 +121,10 @@ inline void heightColorFromVertex(const Point& vertex,
   colorVoxbloxToMsg(rainbowColorMap(mapped_height), color_msg);
 }
 
-inline std_msgs::ColorRGBA getVertexColor(const Mesh::ConstPtr& mesh,
+inline std_msgs::msg::ColorRGBA getVertexColor(const Mesh::ConstPtr& mesh,
                                           const ColorMode& color_mode,
                                           const size_t index) {
-  std_msgs::ColorRGBA color_msg;
+  std_msgs::msg::ColorRGBA color_msg;
   switch (color_mode) {
     case kColor:
       colorVoxbloxToMsg(mesh->colors[index], &color_msg);
@@ -154,8 +154,9 @@ inline void generateVoxbloxMeshMsg(MeshLayer* mesh_layer, ColorMode color_mode,
                                    voxblox_msgs::msg::Mesh* mesh_msg) {
   CHECK_NOTNULL(mesh_msg);
   CHECK_NOTNULL(mesh_layer);
-
-  mesh_msg->header.stamp = ros::Time::now();
+  //TODO: clock as parameter
+  rclcpp::Clock ros_clock_;
+  mesh_msg->header.stamp = ros_clock_.now();
 
   BlockIndexList mesh_indices;
   mesh_layer->getAllUpdatedMeshes(&mesh_indices);
@@ -207,7 +208,7 @@ inline void generateVoxbloxMeshMsg(MeshLayer* mesh_layer, ColorMode color_mode,
                              normalized_verticies.z());
 
       if (color_mode != kNormals) {
-        const std_msgs::ColorRGBA color_msg =
+        const std_msgs::msg::ColorRGBA color_msg =
             getVertexColor(mesh, color_mode, i);
         mesh_block.r.push_back(std::numeric_limits<uint8_t>::max() *
                                color_msg.r);
@@ -237,11 +238,19 @@ inline void generateVoxbloxMeshMsg(const MeshLayer::Ptr& mesh_layer,
   generateVoxbloxMeshMsg(mesh_layer.get(), color_mode, mesh_msg);
 }
 
+inline void pointEigenToMsg(const Point& point, geometry_msgs::msg::Point& point_msg) {
+  point_msg.x = point(0);
+  point_msg.y = point(1);
+  point_msg.z = point(2);
+}
+
 inline void fillMarkerWithMesh(const MeshLayer::ConstPtr& mesh_layer,
                                ColorMode color_mode,
                                visualization_msgs::msg::Marker* marker) {
   CHECK_NOTNULL(marker);
-  marker->header.stamp = ros::Time::now();
+  //TODO: clock as parameter
+  rclcpp::Clock ros_clock_;
+  marker->header.stamp = ros_clock_.now();
   marker->ns = "mesh";
   marker->scale.x = 1;
   marker->scale.y = 1;
@@ -272,13 +281,21 @@ inline void fillMarkerWithMesh(const MeshLayer::ConstPtr& mesh_layer,
 
     for (size_t i = 0u; i < mesh->vertices.size(); i++) {
       geometry_msgs::msg::Point point_msg;
-      tf2::pointEigenToMsg(mesh->vertices[i].cast<double>(), point_msg);
+      pointEigenToMsg(mesh->vertices[i].cast<double>(), point_msg);
       marker->points.push_back(point_msg);
-      marker->colors.push_back(getVertexColor(mesh, color_mode, i));
+      std_msgs::msg::ColorRGBA color_rgba = getVertexColor(mesh, color_mode, i);
+      marker->colors.push_back(color_rgba);
     }
   }
 }
-
+// ‘std::vector<std_msgs::msg::ColorRGBA_<std::allocator<void> >,
+//  std::allocator<std_msgs::msg::ColorRGBA_<std::allocator<void> > > >::push_back(std_msgs::msg::ColorRGBA&)’
+//
+//
+//
+//
+//
+//
 inline void fillPointcloudWithMesh(
     const MeshLayer::ConstPtr& mesh_layer, ColorMode color_mode,
     pcl::PointCloud<pcl::PointXYZRGB>* pointcloud) {

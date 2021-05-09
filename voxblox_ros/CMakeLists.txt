@@ -12,7 +12,8 @@ find_package(PCL REQUIRED)
 find_package(voxblox REQUIRED)
 find_package(voxblox_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
-find_package(visualization_msgs)
+find_package(visualization_msgs REQUIRED)
+find_package(minkindr_conversions REQUIRED)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
@@ -22,6 +23,7 @@ set(dependencies
     rclcpp
     rclcpp_action
     voxblox_msgs
+    minkindr_conversions
 )
 
 #############
@@ -35,16 +37,16 @@ include_directories(
   ${voxblox_msgs_INCLUDE_DIRS}
 )
 
-add_library(esdf_server SHARED src/esdf_server.cc)
-list(APPEND voxblox_libs esdf_server)
-add_library(interactive_slider SHARED src/interactive_slider.cc)
-list(APPEND voxblox_libs interactive_slider)
-add_library(simulation_server SHARED src/simulation_server.cc)
-list(APPEND voxblox_libs simulation_server)
-add_library(intensity_server SHARED src/intensity_server.cc)
-list(APPEND voxblox_libs intensity_server)
-add_library(transformer SHARED src/transformer.cc)
-list(APPEND voxblox_libs transformer)
+#add_library(esdf_server SHARED src/esdf_server.cc)
+#list(APPEND voxblox_libs esdf_server)
+#add_library(interactive_slider SHARED src/interactive_slider.cc)
+#list(APPEND voxblox_libs interactive_slider)
+#add_library(simulation_server SHARED src/simulation_server.cc)
+#list(APPEND voxblox_libs simulation_server)
+#add_library(intensity_server SHARED src/intensity_server.cc)
+#list(APPEND voxblox_libs intensity_server)
+#add_library(transformer SHARED src/transformer.cc)
+#list(APPEND voxblox_libs transformer)
 add_library(tsdf_server SHARED src/tsdf_server.cc)
 list(APPEND voxblox_libs tsdf_server)
 
@@ -57,8 +59,8 @@ endforeach()
 # EXECUTABLES #
 ###############
 
-add_executable(voxblox_eval src/voxblox_eval.cc)
-ament_target_dependencies(voxblox_eval ${dependencies})
+#add_executable(voxblox_eval src/voxblox_eval.cc)
+#ament_target_dependencies(voxblox_eval ${dependencies})
 
 #add_executable(tsdf_server src/tsdf_server.cpp)
 #ament_target_dependencies(tsdf_server ${dependencies})
@@ -69,34 +71,33 @@ ament_target_dependencies(voxblox_eval ${dependencies})
 #add_executable(intensity_server src/intensity_server.cpp)
 #ament_target_dependencies(intensity_server ${dependencies})
 
-add_executable(simulation_eval src/simulation_eval.cc)
-ament_target_dependencies(simulation_eval ${dependencies})
+#add_executable(simulation_eval src/simulation_eval.cc)
+#ament_target_dependencies(simulation_eval ${dependencies})
 
-add_executable(visualize_tsdf src/visualize_tsdf.cc)
-ament_target_dependencies(visualize_tsdf ${dependencies})
+#add_executable(visualize_tsdf src/visualize_tsdf.cc)
+#ament_target_dependencies(visualize_tsdf ${dependencies})
 
 install(
   DIRECTORY launch cfg mesh_results
   DESTINATION share/${PROJECT_NAME})
 
 install(TARGETS
-  voxblox_eval
+  #voxblox_eval
   tsdf_server
-  esdf_server
-  intensity_server
-  simulation_eval
-  visualize_tsdf
+  #esdf_server
+  #intensity_server
+  #simulation_eval
+  #visualize_tsdf
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  ament_lint_auto_find_test_dependencies()
-
-  find_package(ament_cmake_gtest REQUIRED)
-endif()
+#if(BUILD_TESTING)
+#  find_package(ament_lint_auto REQUIRED)
+#  ament_lint_auto_find_test_dependencies()
+#  find_package(ament_cmake_gtest REQUIRED)
+#endif()
 
 
 ament_export_dependencies(${dependencies})
