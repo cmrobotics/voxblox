@@ -70,7 +70,7 @@ class Transformer {
    * To be replaced (at least optionally) with odometry + static transform
    * from IMU to visual frame.
    */
-  tf2::TransformListener tf_listener_;
+  tf2_ros::TransformListener tf_listener_;
 
   // l Only used if use_tf_transforms_ set to false.
   ros::Subscriber transform_sub_;

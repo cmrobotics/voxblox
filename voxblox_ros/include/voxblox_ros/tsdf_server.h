@@ -10,11 +10,11 @@
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <sensor_msgs/msg/point_cloud.hpp>
-#include <ros/ros.h>
-#include <sensor_msgs/PointCloud2.h>
-#include <std_srvs/Empty.h>
+//#include <ros/ros.h>
+#include <sensor_msgs/msg/point_cloud2.hpp>
 #include "tf2_ros/transform_broadcaster.h"
 #include <visualization_msgs/msg/marker_array.hpp>
+#include <std_srvs/srv/empty.hpp>
 
 #include <voxblox/alignment/icp.h>
 #include <voxblox/core/tsdf_map.h>
@@ -27,20 +27,19 @@
 #include <voxblox_msgs/msg/mesh.hpp>
 
 #include "voxblox_ros/mesh_vis.h"
-#include "voxblox_ros/ptcloud_vis.h"
+//#include "voxblox_ros/ptcloud_vis.h"
 #include "voxblox_ros/transformer.h"
 
 namespace voxblox {
 
 constexpr float kDefaultMaxIntensity = 100.0;
 
-class TsdfServer {
+class TsdfServer : public rclcpp::Node {
  public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-  TsdfServer(const ros::NodeHandle& nh, const ros::NodeHandle& nh_private);
-  TsdfServer(const ros::NodeHandle& nh, const ros::NodeHandle& nh_private,
-             const TsdfMap::Config& config,
+  TsdfServer();
+  TsdfServer(const TsdfMap::Config& config,
              const TsdfIntegratorBase::Config& integrator_config,
              const MeshIntegratorConfig& mesh_config);
   virtual ~TsdfServer() {}
@@ -158,7 +157,7 @@ class TsdfServer {
   ros::ServiceServer publish_tsdf_map_srv_;
 
   /// Tools for broadcasting TFs.
-  tf2::TransformBroadcaster tf_broadcaster_;
+  tf2_ros::TransformBroadcaster tf_broadcaster_;
 
   // Timers.
   ros::Timer update_mesh_timer_;

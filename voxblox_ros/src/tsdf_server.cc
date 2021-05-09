@@ -1,27 +1,22 @@
 #include "voxblox_ros/tsdf_server.h"
 
-#include <minkindr_conversions/kindr_msg.h>
-#include <minkindr_conversions/kindr_tf.h>
+//#include <minkindr_conversions/kindr_msg.h>
+//#include <minkindr_conversions/kindr_tf.h>
 
 #include "voxblox_ros/conversions.h"
 #include "voxblox_ros/ros_params.h"
 
 namespace voxblox {
 
-TsdfServer::TsdfServer(const ros::NodeHandle& nh,
-                       const ros::NodeHandle& nh_private)
+TsdfServer::TsdfServer()
     : TsdfServer(nh, nh_private, getTsdfMapConfigFromRosParam(nh_private),
                  getTsdfIntegratorConfigFromRosParam(nh_private),
                  getMeshIntegratorConfigFromRosParam(nh_private)) {}
 
-TsdfServer::TsdfServer(const ros::NodeHandle& nh,
-                       const ros::NodeHandle& nh_private,
-                       const TsdfMap::Config& config,
+TsdfServer::TsdfServer(const TsdfMap::Config& config,
                        const TsdfIntegratorBase::Config& integrator_config,
                        const MeshIntegratorConfig& mesh_config)
-    : nh_(nh),
-      nh_private_(nh_private),
-      verbose_(true),
+    : verbose_(true),
       world_frame_("world"),
       icp_corrected_frame_("icp_corrected"),
       pose_corrected_frame_("pose_corrected"),
@@ -39,7 +34,7 @@ TsdfServer::TsdfServer(const ros::NodeHandle& nh,
       pointcloud_queue_size_(1),
       num_subscribers_tsdf_map_(0),
       transformer_(nh, nh_private) {
-  getServerConfigFromRosParam(nh_private);
+  //getServerConfigFromRosParam(nh_private);
 
   // Advertise topics.
   surface_pointcloud_pub_ =
