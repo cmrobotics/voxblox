@@ -70,7 +70,7 @@ void Transformer::transformCallback(
 
 bool Transformer::lookupTransform(const std::string& from_frame,
                                   const std::string& to_frame,
-                                  const ros::Time& timestamp,
+                                  const rclcpp::Time& timestamp,
                                   Transformation* transform) {
   CHECK_NOTNULL(transform);
   if (use_tf_transforms_) {
@@ -83,11 +83,11 @@ bool Transformer::lookupTransform(const std::string& from_frame,
 // Stolen from octomap_manager
 bool Transformer::lookupTransformTf(const std::string& from_frame,
                                     const std::string& to_frame,
-                                    const ros::Time& timestamp,
+                                    const rclcpp::Time& timestamp,
                                     Transformation* transform) {
   CHECK_NOTNULL(transform);
   tf2::StampedTransform tf_transform;
-  ros::Time time_to_lookup = timestamp;
+  rclcpp::Time time_to_lookup = timestamp;
 
   // Allow overwriting the TF frame for the sensor.
   std::string from_frame_modified = from_frame;
@@ -115,7 +115,7 @@ bool Transformer::lookupTransformTf(const std::string& from_frame,
   return true;
 }
 
-bool Transformer::lookupTransformQueue(const ros::Time& timestamp,
+bool Transformer::lookupTransformQueue(const rclcpp::Time& timestamp,
                                        Transformation* transform) {
   CHECK_NOTNULL(transform);
   if (transform_queue_.empty()) {

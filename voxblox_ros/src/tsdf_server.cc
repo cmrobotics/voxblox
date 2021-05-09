@@ -612,11 +612,11 @@ bool TsdfServer::publishTsdfMapCallback(std_srvs::srv::Empty::Request& /*request
   return true;
 }
 
-void TsdfServer::updateMeshEvent(const ros::TimerEvent& /*event*/) {
+void TsdfServer::updateMeshEvent(const rclcpp::TimerEvent& /*event*/) {
   updateMesh();
 }
 
-void TsdfServer::publishMapEvent(const ros::TimerEvent& /*event*/) {
+void TsdfServer::publishMapEvent(const rclcpp::TimerEvent& /*event*/) {
   publishMap();
 }
 

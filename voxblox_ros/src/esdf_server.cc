@@ -116,7 +116,7 @@ bool EsdfServer::generateEsdfCallback(
   return true;
 }
 
-void EsdfServer::updateEsdfEvent(const ros::TimerEvent& /*event*/) {
+void EsdfServer::updateEsdfEvent(const rclcpp::TimerEvent& /*event*/) {
   updateEsdf();
 }
 

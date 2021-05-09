@@ -165,7 +165,7 @@ void SimpleTsdfVisualizer::run(const Layer<TsdfVoxel>& tsdf_layer) {
     toConnectedPCLPolygonMesh(*mesh_layer, tsdf_world_frame_, &polygon_mesh);
     pcl_msgs::PolygonMesh pcl_mesh_msg;
     pcl_conversions::fromPCL(polygon_mesh, pcl_mesh_msg);
-    mesh_msg.header.stamp = ros::Time::now();
+    mesh_msg.header.stamp = rclcpp::Time::now();
     mesh_pcl_mesh_pub_.publish(mesh_msg);
 
     if (!tsdf_mesh_output_path_.empty()) {
