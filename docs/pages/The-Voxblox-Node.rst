@@ -57,9 +57,9 @@ traversable ``pcl::PointCloud<pcl::PointXYZI>``
 Subscribed Topics
 -----------------
 
-transform ``geometry_msgs::TransformStamped``
+transform ``geometry_msgs::msg::TransformStamped``
   Only appears if ``use_tf_transforms`` is false. The transformation from the world frame to the current sensor frame.
-pointcloud ``sensor_msgs::PointCloud2``
+pointcloud ``sensor_msgs::msg::PointCloud2``
   The input pointcloud to be integrated.
 freespace_pointcloud ``sensor_msgs::PointCLoud2``
   Only appears if ``use_freespace_pointcloud`` is true. Unlike the ``pointcloud`` topic where the given points lie on surfaces, the points in the ``freespace_pointcloud`` are taken to be floating in empty space. These points can assist in generating more complete freespace information in a map.
@@ -67,7 +67,7 @@ tsdf_map_in ``voxblox_msgs::msg::Layer``
   Replaces the current TSDF layer with that from this topic. Voxel size and voxels per side should match.
 esdf_map_in ``voxblox_msgs::msg::Layer``
   Replaces the current ESDF layer with that from this topic. Voxel size and voxels per side should match.
-icp_transform ``geometry_msgs::TransformStamped``
+icp_transform ``geometry_msgs::msg::TransformStamped``
   If ICP is enabled, this is the current corrected transform between the world frame and the ICP frame.
 
 Services

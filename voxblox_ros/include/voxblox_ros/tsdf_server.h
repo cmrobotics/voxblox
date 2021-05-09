@@ -15,7 +15,7 @@
 #include "tf2_ros/transform_broadcaster.h"
 #include <visualization_msgs/msg/marker_array.hpp>
 #include <std_srvs/srv/empty.hpp>
-
+#include <rclcpp/rclcpp.hpp>
 #include <voxblox/alignment/icp.h>
 #include <voxblox/core/tsdf_map.h>
 #include <voxblox/integrator/tsdf_integrator.h>
@@ -44,15 +44,15 @@ class TsdfServer : public rclcpp::Node {
              const MeshIntegratorConfig& mesh_config);
   virtual ~TsdfServer() {}
 
-  void getServerConfigFromRosParam(const ros::NodeHandle& nh_private);
+  //void getServerConfigFromRosParam(const ros::NodeHandle& nh_private);
 
-  void insertPointcloud(const sensor_msgs::PointCloud2::Ptr& pointcloud);
+  void insertPointcloud(const sensor_msgs::msg::PointCloud2::Ptr& pointcloud);
 
   void insertFreespacePointcloud(
-      const sensor_msgs::PointCloud2::Ptr& pointcloud);
+      const sensor_msgs::msg::PointCloud2::Ptr& pointcloud);
 
   virtual void processPointCloudMessageAndInsert(
-      const sensor_msgs::PointCloud2::Ptr& pointcloud_msg,
+      const sensor_msgs::msg::PointCloud2::Ptr& pointcloud_msg,
       const Transformation& T_G_C, const bool is_freespace_pointcloud);
 
   void integratePointcloud(const Transformation& T_G_C,
@@ -92,8 +92,8 @@ class TsdfServer : public rclcpp::Node {
   bool publishTsdfMapCallback(std_srvs::srv::Empty::Request& request,     // NOLINT
                               std_srvs::srv::Empty::Response& response);  // NOLINT
 
-  void updateMeshEvent(const ros::TimerEvent& event);
-  void publishMapEvent(const ros::TimerEvent& event);
+  void updateMeshEvent(const rclcpp::TimerEvent& event);
+  void publishMapEvent(const rclcpp::TimerEvent& event);
 
   std::shared_ptr<TsdfMap> getTsdfMapPtr() { return tsdf_map_; }
   std::shared_ptr<const TsdfMap> getTsdfMapPtr() const { return tsdf_map_; }
@@ -124,44 +124,41 @@ class TsdfServer : public rclcpp::Node {
    * the queue.
    */
   bool getNextPointcloudFromQueue(
-      std::queue<sensor_msgs::PointCloud2::Ptr>* queue,
-      sensor_msgs::PointCloud2::Ptr* pointcloud_msg, Transformation* T_G_C);
-
-  ros::NodeHandle nh_;
-  ros::NodeHandle nh_private_;
+      std::queue<sensor_msgs::msg::PointCloud2::Ptr>* queue,
+      sensor_msgs::msg::PointCloud2::Ptr* pointcloud_msg, Transformation* T_G_C);
 
   /// Data subscribers.
-  ros::Subscriber pointcloud_sub_;
-  ros::Subscriber freespace_pointcloud_sub_;
+  rclcpp::Subscriber pointcloud_sub_;
+  rclcpp::Subscriber freespace_pointcloud_sub_;
 
   /// Publish markers for visualization.
-  ros::Publisher mesh_pub_;
-  ros::Publisher tsdf_pointcloud_pub_;
-  ros::Publisher surface_pointcloud_pub_;
-  ros::Publisher tsdf_slice_pub_;
-  ros::Publisher occupancy_marker_pub_;
-  ros::Publisher icp_transform_pub_;
+  rclcpp::Publisher mesh_pub_;
+  rclcpp::Publisher tsdf_pointcloud_pub_;
+  rclcpp::Publisher surface_pointcloud_pub_;
+  rclcpp::Publisher tsdf_slice_pub_;
+  rclcpp::Publisher occupancy_marker_pub_;
+  rclcpp::Publisher icp_transform_pub_;
 
   /// Publish the complete map for other nodes to consume.
-  ros::Publisher tsdf_map_pub_;
+  rclcpp::Publisher tsdf_map_pub_;
 
   /// Subscriber to subscribe to another node generating the map.
-  ros::Subscriber tsdf_map_sub_;
+  rclcpp::Subscriber tsdf_map_sub_;
 
   // Services.
-  ros::ServiceServer generate_mesh_srv_;
-  ros::ServiceServer clear_map_srv_;
-  ros::ServiceServer save_map_srv_;
-  ros::ServiceServer load_map_srv_;
-  ros::ServiceServer publish_pointclouds_srv_;
-  ros::ServiceServer publish_tsdf_map_srv_;
+  rclcpp::Service generate_mesh_srv_;
+  rclcpp::Service clear_map_srv_;
+  rclcpp::Service save_map_srv_;
+  rclcpp::Service load_map_srv_;
+  rclcpp::Service publish_pointclouds_srv_;
+  rclcpp::Service publish_tsdf_map_srv_;
 
   /// Tools for broadcasting TFs.
   tf2_ros::TransformBroadcaster tf_broadcaster_;
 
   // Timers.
-  ros::Timer update_mesh_timer_;
-  ros::Timer publish_map_timer_;
+  rclcpp::Timer update_mesh_timer_;
+  rclcpp::Timer publish_map_timer_;
 
   bool verbose_;
 
@@ -249,8 +246,8 @@ class TsdfServer : public rclcpp::Node {
    * Queue of incoming pointclouds, in case the transforms can't be immediately
    * resolved.
    */
-  std::queue<sensor_msgs::PointCloud2::Ptr> pointcloud_queue_;
-  std::queue<sensor_msgs::PointCloud2::Ptr> freespace_pointcloud_queue_;
+  std::queue<sensor_msgs::msg::PointCloud2::Ptr> pointcloud_queue_;
+  std::queue<sensor_msgs::msg::PointCloud2::Ptr> freespace_pointcloud_queue_;
 
   // Last message times for throttling input.
   ros::Time last_msg_time_ptcloud_;

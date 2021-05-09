@@ -84,11 +84,11 @@ class SimpleTsdfVisualizer {
  private:
   ros::NodeHandle nh_private_;
 
-  ros::Publisher surface_pointcloud_pub_;
-  ros::Publisher tsdf_pointcloud_pub_;
-  ros::Publisher mesh_pub_;
-  ros::Publisher mesh_pointcloud_pub_;
-  ros::Publisher mesh_pcl_mesh_pub_;
+  rclcpp::Publisher surface_pointcloud_pub_;
+  rclcpp::Publisher tsdf_pointcloud_pub_;
+  rclcpp::Publisher mesh_pub_;
+  rclcpp::Publisher mesh_pointcloud_pub_;
+  rclcpp::Publisher mesh_pcl_mesh_pub_;
 
   // Settings
   double tsdf_surface_distance_threshold_factor_;

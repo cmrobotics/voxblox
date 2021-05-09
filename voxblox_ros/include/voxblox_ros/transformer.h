@@ -3,10 +3,12 @@
 
 #include <string>
 
-#include <geometry_msgs/TransformStamped.h>
+#include <geometry_msgs/msg/transform_stamped.h>
 #include <tf2_ros/transform_listener.h>
-
+#include <rclcpp/time.hpp>
 #include <voxblox/core/common.h>
+#include <rclcpp/rclcpp.hpp>
+
 
 namespace voxblox {
 
@@ -18,24 +20,21 @@ class Transformer {
  public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-  Transformer(const ros::NodeHandle& nh, const ros::NodeHandle& nh_private);
+  Transformer();
 
   bool lookupTransform(const std::string& from_frame,
-                       const std::string& to_frame, const ros::Time& timestamp,
+                       const std::string& to_frame, const rclcpp::Time& timestamp,
                        Transformation* transform);
 
-  void transformCallback(const geometry_msgs::TransformStamped& transform_msg);
+  void transformCallback(const geometry_msgs::msg::TransformStamped& transform_msg);
 
  private:
   bool lookupTransformTf(const std::string& from_frame,
                          const std::string& to_frame,
-                         const ros::Time& timestamp, Transformation* transform);
+                         const rclcpp::Time& timestamp, Transformation* transform);
 
-  bool lookupTransformQueue(const ros::Time& timestamp,
+  bool lookupTransformQueue(const rclcpp::Time& timestamp,
                             Transformation* transform);
-
-  ros::NodeHandle nh_;
-  ros::NodeHandle nh_private_;
 
   /**
    * Global/map coordinate frame. Will always look up TF transforms to this
@@ -73,10 +72,10 @@ class Transformer {
   tf2_ros::TransformListener tf_listener_;
 
   // l Only used if use_tf_transforms_ set to false.
-  ros::Subscriber transform_sub_;
+  rclcpp::Subscription<geometry_msgs::msg::TransformStamped> transform_sub_;
 
   // l Transform queue, used only when use_tf_transforms is false.
-  AlignedDeque<geometry_msgs::TransformStamped> transform_queue_;
+  AlignedDeque<geometry_msgs::msg::TransformStamped> transform_queue_;
 };
 
 }  // namespace voxblox
