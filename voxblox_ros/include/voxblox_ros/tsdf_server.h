@@ -133,17 +133,17 @@ class TsdfServer : public rclcpp::Node {
 
   /// Publish markers for visualization.
   rclcpp::Publisher mesh_pub_;
-  rclcpp::Publisher tsdf_pointcloud_pub_;
-  rclcpp::Publisher surface_pointcloud_pub_;
-  rclcpp::Publisher tsdf_slice_pub_;
-  rclcpp::Publisher occupancy_marker_pub_;
-  rclcpp::Publisher icp_transform_pub_;
+  rclcpp::Publisher<pcl::PointCloud<pcl::PointXYZI>> tsdf_pointcloud_pub_;
+  rclcpp::Publisher<pcl::PointCloud<pcl::PointXYZRGB>> surface_pointcloud_pub_;
+  rclcpp::Publisher<pcl::PointCloud<pcl::PointXYZI>> tsdf_slice_pub_;
+  rclcpp::Publisher<visualization_msgs::msg::MarkerArray> occupancy_marker_pub_;
+  rclcpp::Publisher<geometry_msgs::msg::TransformStamped> icp_transform_pub_;
 
   /// Publish the complete map for other nodes to consume.
-  rclcpp::Publisher tsdf_map_pub_;
+  rclcpp::Publisher<voxblox_msgs::msg::Layer> tsdf_map_pub_;
 
   /// Subscriber to subscribe to another node generating the map.
-  rclcpp::Subscriber tsdf_map_sub_;
+  rclcpp::Subscriber<voxblox_msgs::msg::Layer> tsdf_map_sub_;
 
   // Services.
   rclcpp::Service generate_mesh_srv_;
@@ -250,8 +250,8 @@ class TsdfServer : public rclcpp::Node {
   std::queue<sensor_msgs::msg::PointCloud2::Ptr> freespace_pointcloud_queue_;
 
   // Last message times for throttling input.
-  ros::Time last_msg_time_ptcloud_;
-  ros::Time last_msg_time_freespace_ptcloud_;
+  rclcpp::Time last_msg_time_ptcloud_;
+  rclcpp::Time last_msg_time_freespace_ptcloud_;
 
   /// Current transform corrections from ICP.
   Transformation icp_corrected_transform_;

@@ -38,7 +38,7 @@ class EsdfServer : public TsdfServer {
   virtual bool saveMap(const std::string& file_path);
   virtual bool loadMap(const std::string& file_path);
 
-  void updateEsdfEvent(const ros::TimerEvent& event);
+  void updateEsdfEvent(const rclcpp::TimerEvent& event);
 
   /// Call this to update the ESDF based on latest state of the TSDF map,
   /// considering only the newly updated parts of the TSDF map (checked with
@@ -93,7 +93,7 @@ class EsdfServer : public TsdfServer {
   rclcpp::Service generate_esdf_srv_;
 
   /// Timers.
-  ros::Timer update_esdf_timer_;
+  rclcpp::Timer update_esdf_timer_;
 
   bool clear_sphere_for_planning_;
   bool publish_esdf_map_;
