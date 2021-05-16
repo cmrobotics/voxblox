@@ -8,6 +8,7 @@
 //#include <std_msgs/msg/string.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
 #include <voxblox/core/common.h>
+#include <voxblox/utils/color_maps.h>
 //#include <voxblox_ros/transformer.h>
 //#include <std_msgs/msg/string.hpp>
 
@@ -18,6 +19,10 @@
 
 class TsdfServer : public rclcpp::Node
 {
+  private:
+    /// Colormap to use for intensity pointclouds.
+    std::shared_ptr<voxblox::ColorMap> color_map_;
+
   public:
     TsdfServer(): Node("tsdf_server") {
       //pointcloud_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(

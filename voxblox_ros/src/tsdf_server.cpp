@@ -1,5 +1,9 @@
 #include <voxblox_ros/tsdf_server.hpp>
+
 #include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <voxblox_ros/conversions.h>
+#include <pcl_conversions/pcl_conversions.h>
 #include <voxblox/utils/timing.h>
 
 void TsdfServer::processPointCloudMessageAndInsert(
@@ -21,27 +25,35 @@ void TsdfServer::processPointCloudMessageAndInsert(
   voxblox::Pointcloud points_C;
   voxblox::Colors colors;
   voxblox::timing::Timer ptcloud_timer("ptcloud_preprocess");
- /**
 
   // Convert differently depending on RGB or I type.
   if (color_pointcloud) {
     pcl::PointCloud<pcl::PointXYZRGB> pointcloud_pcl;
     // pointcloud_pcl is modified below:
     pcl::fromROSMsg(*pointcloud_msg, pointcloud_pcl);
-    convertPointcloud(pointcloud_pcl, color_map_, &points_C, &colors);
+    // pcl::PointCloud<pcl::PointXYZRGB>&, int&, voxblox::Pointcloud*, voxblox::Colors*)’
+    // voxblox::convertPointcloud(pointcloud_pcl, color_map_, &points_C, &colors);
+    // -------------------------------------
+    //  inline void convertPointcloud(
+    //  const typename pcl::PointCloud<PCLPoint>& pointcloud_pcl,
+    //  const std::shared_ptr<ColorMap>& color_map,
+    //  Pointcloud* points_C,
+    //  Colors* colors) {
+    voxblox::convertPointcloud(pointcloud_pcl, color_map_, &points_C, &colors);
   } else if (has_intensity) {
     pcl::PointCloud<pcl::PointXYZI> pointcloud_pcl;
     // pointcloud_pcl is modified below:
     pcl::fromROSMsg(*pointcloud_msg, pointcloud_pcl);
-    convertPointcloud(pointcloud_pcl, color_map_, &points_C, &colors);
+    //convertPointcloud(pointcloud_pcl, color_map_, &points_C, &colors);
   } else {
     pcl::PointCloud<pcl::PointXYZ> pointcloud_pcl;
     // pointcloud_pcl is modified below:
     pcl::fromROSMsg(*pointcloud_msg, pointcloud_pcl);
-    convertPointcloud(pointcloud_pcl, color_map_, &points_C, &colors);
+    //convertPointcloud(pointcloud_pcl, color_map_, &points_C, &colors);
   }
   ptcloud_timer.Stop();
 
+ /**
 
 
   Transformation T_G_C_refined = T_G_C;
