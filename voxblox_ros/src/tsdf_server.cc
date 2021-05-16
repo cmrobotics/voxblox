@@ -37,32 +37,32 @@ TsdfServer::TsdfServer(const TsdfMap::Config& config,
   //getServerConfigFromRosParam(nh_private);
 
   // Advertise topics.
-  surface_pointcloud_pub_ =
-      nh_private_.advertise<pcl::PointCloud<pcl::PointXYZRGB> >(
-          "surface_pointcloud", 1, true);
-  tsdf_pointcloud_pub_ =
-      nh_private_.advertise<pcl::PointCloud<pcl::PointXYZI> >("tsdf_pointcloud",
+  //TODO surface_pointcloud_pub_ =
+  //TODO     nh_private_.advertise<pcl::PointCloud<pcl::PointXYZRGB> >(
+  //TODO         "surface_pointcloud", 1, true);
+  //TODO tsdf_pointcloud_pub_ =
+  //TODO     nh_private_.advertise<pcl::PointCloud<pcl::PointXYZI> >("tsdf_pointcloud",
                                                               1, true);
-  occupancy_marker_pub_ =
-      nh_private_.advertise<visualization_msgs::msg::MarkerArray>("occupied_nodes",
+  //TODO occupancy_marker_pub_ =
+  //TODO     nh_private_.advertise<visualization_msgs::msg::MarkerArray>("occupied_nodes",
                                                              1, true);
-  tsdf_slice_pub_ = nh_private_.advertise<pcl::PointCloud<pcl::PointXYZI> >(
-      "tsdf_slice", 1, true);
+  //TODO tsdf_slice_pub_ = nh_private_.advertise<pcl::PointCloud<pcl::PointXYZI> >(
+  //TODO     "tsdf_slice", 1, true);
 
-  nh_private_.param("pointcloud_queue_size", pointcloud_queue_size_,
-                    pointcloud_queue_size_);
-  pointcloud_sub_ = nh_.subscribe("pointcloud", pointcloud_queue_size_,
-                                  &TsdfServer::insertPointcloud, this);
+  //TODO nh_private_.param("pointcloud_queue_size", pointcloud_queue_size_,
+  //TODO                   pointcloud_queue_size_);
+  //TODO pointcloud_sub_ = nh_.subscribe("pointcloud", pointcloud_queue_size_,
+  //TODO                                 &TsdfServer::insertPointcloud, this);
 
-  mesh_pub_ = nh_private_.advertise<voxblox_msgs::msg::Mesh>("mesh", 1, true);
+  //TODO mesh_pub_ = nh_private_.advertise<voxblox_msgs::msg::Mesh>("mesh", 1, true);
 
   // Publishing/subscribing to a layer from another node (when using this as
   // a library, for example within a planner).
-  tsdf_map_pub_ =
-      nh_private_.advertise<voxblox_msgs::msg::Layer>("tsdf_map_out", 1, false);
-  tsdf_map_sub_ = nh_private_.subscribe("tsdf_map_in", 1,
+  //TODO tsdf_map_pub_ =
+  //TODO     nh_private_.advertise<voxblox_msgs::msg::Layer>("tsdf_map_out", 1, false);
+  //TODO tsdf_map_sub_ = nh_private_.subscribe("tsdf_map_in", 1,
                                         &TsdfServer::tsdfMapCallback, this);
-  nh_private_.param("publish_tsdf_map", publish_tsdf_map_, publish_tsdf_map_);
+  //TODO nh_private_.param("publish_tsdf_map", publish_tsdf_map_, publish_tsdf_map_);
 
   if (use_freespace_pointcloud_) {
     // points that are not inside an object, but may also not be on a surface.
@@ -142,68 +142,6 @@ TsdfServer::TsdfServer(const TsdfMap::Config& config,
                                 &TsdfServer::publishMapEvent, this);
   }
 }
-/*
-void TsdfServer::getServerConfigFromRosParam(
-    const ros::NodeHandle& nh_private) {
-  // Before subscribing, determine minimum time between messages.
-  // 0 by default.
-  double min_time_between_msgs_sec = 0.0;
-  nh_private.param("min_time_between_msgs_sec", min_time_between_msgs_sec,
-                   min_time_between_msgs_sec);
-  min_time_between_msgs_.fromSec(min_time_between_msgs_sec);
-
-  nh_private.param("max_block_distance_from_body",
-                   max_block_distance_from_body_,
-                   max_block_distance_from_body_);
-  nh_private.param("slice_level", slice_level_, slice_level_);
-  nh_private.param("world_frame", world_frame_, world_frame_);
-  nh_private.param("publish_pointclouds_on_update",
-                   publish_pointclouds_on_update_,
-                   publish_pointclouds_on_update_);
-  nh_private.param("publish_slices", publish_slices_, publish_slices_);
-  nh_private.param("publish_pointclouds", publish_pointclouds_,
-                   publish_pointclouds_);
-
-  nh_private.param("use_freespace_pointcloud", use_freespace_pointcloud_,
-                   use_freespace_pointcloud_);
-  nh_private.param("pointcloud_queue_size", pointcloud_queue_size_,
-                   pointcloud_queue_size_);
-  nh_private.param("enable_icp", enable_icp_, enable_icp_);
-  nh_private.param("accumulate_icp_corrections", accumulate_icp_corrections_,
-                   accumulate_icp_corrections_);
-
-  nh_private.param("verbose", verbose_, verbose_);
-
-  // Mesh settings.
-  nh_private.param("mesh_filename", mesh_filename_, mesh_filename_);
-  std::string color_mode("");
-  nh_private.param("color_mode", color_mode, color_mode);
-  color_mode_ = getColorModeFromString(color_mode);
-
-  // Color map for intensity pointclouds.
-  std::string intensity_colormap("rainbow");
-  float intensity_max_value = kDefaultMaxIntensity;
-  nh_private.param("intensity_colormap", intensity_colormap,
-                   intensity_colormap);
-  nh_private.param("intensity_max_value", intensity_max_value,
-                   intensity_max_value);
-
-  // Default set in constructor.
-  if (intensity_colormap == "rainbow") {
-    color_map_.reset(new RainbowColorMap());
-  } else if (intensity_colormap == "inverse_rainbow") {
-    color_map_.reset(new InverseRainbowColorMap());
-  } else if (intensity_colormap == "grayscale") {
-    color_map_.reset(new GrayscaleColorMap());
-  } else if (intensity_colormap == "inverse_grayscale") {
-    color_map_.reset(new InverseGrayscaleColorMap());
-  } else if (intensity_colormap == "ironbow") {
-    color_map_.reset(new IronbowColorMap());
-  } else {
-    ROS_ERROR_STREAM("Invalid color map: " << intensity_colormap);
-  }
-  color_map_->setMaxValue(intensity_max_value);
-}*/
 
 void TsdfServer::processPointCloudMessageAndInsert(
     const sensor_msgs::msg::PointCloud2::Ptr& pointcloud_msg,
@@ -256,8 +194,8 @@ void TsdfServer::processPointCloudMessageAndInsert(
         icp_->runICP(tsdf_map_->getTsdfLayer(), points_C,
                      icp_corrected_transform_ * T_G_C, &T_G_C_refined);
     if (verbose_) {
-      ROS_INFO("ICP refinement performed %zu successful update steps",
-               num_icp_updates);
+      //TODO ROS_INFO("ICP refinement performed %zu successful update steps",
+      //         num_icp_updates);
     }
     icp_corrected_transform_ = T_G_C_refined * T_G_C.inverse();
 
@@ -294,16 +232,16 @@ void TsdfServer::processPointCloudMessageAndInsert(
   }
 
   if (verbose_) {
-    ROS_INFO("Integrating a pointcloud with %lu points.", points_C.size());
+    //TODO ROS_INFO("Integrating a pointcloud with %lu points.", points_C.size());
   }
 
   ros::WallTime start = ros::WallTime::now();
   integratePointcloud(T_G_C_refined, points_C, colors, is_freespace_pointcloud);
   ros::WallTime end = ros::WallTime::now();
   if (verbose_) {
-    ROS_INFO("Finished integrating in %f seconds, have %lu blocks.",
-             (end - start).toSec(),
-             tsdf_map_->getTsdfLayer().getNumberOfAllocatedBlocks());
+    //TODO ROS_INFO("Finished integrating in %f seconds, have %lu blocks.",
+    //         (end - start).toSec(),
+    //        tsdf_map_->getTsdfLayer().getNumberOfAllocatedBlocks());
   }
 
   timing::Timer block_remove_timer("remove_distant_blocks");
@@ -333,10 +271,10 @@ bool TsdfServer::getNextPointcloudFromQueue(
     return true;
   } else {
     if (queue->size() >= kMaxQueueSize) {
-      ROS_ERROR_THROTTLE(60,
-                         "Input pointcloud queue getting too long! Dropping "
-                         "some pointclouds. Either unable to look up transform "
-                         "timestamps or the processing is taking too long.");
+      //TODO ROS_ERROR_THROTTLE(60,
+      //                   "Input pointcloud queue getting too long! Dropping "
+      //                   "some pointclouds. Either unable to look up transform "
+      //                   "timestamps or the processing is taking too long.");
       while (queue->size() >= kMaxQueueSize) {
         queue->pop();
       }
@@ -374,9 +312,9 @@ void TsdfServer::insertPointcloud(
   }
 
   if (verbose_) {
-    ROS_INFO_STREAM("Timings: " << std::endl << timing::Timing::Print());
-    ROS_INFO_STREAM(
-        "Layer memory: " << tsdf_map_->getTsdfLayer().getMemorySize());
+    //ROS_INFO_STREAM("Timings: " << std::endl << timing::Timing::Print());
+    //ROS_INFO_STREAM(
+    //    "Layer memory: " << tsdf_map_->getTsdfLayer().getMemorySize());
   }
 }
 
@@ -412,10 +350,10 @@ void TsdfServer::publishAllUpdatedTsdfVoxels() {
   // Create a pointcloud with distance = intensity.
   pcl::PointCloud<pcl::PointXYZI> pointcloud;
 
-  createDistancePointcloudFromTsdfLayer(tsdf_map_->getTsdfLayer(), &pointcloud);
+  //TODO createDistancePointcloudFromTsdfLayer(tsdf_map_->getTsdfLayer(), &pointcloud);
 
   pointcloud.header.frame_id = world_frame_;
-  tsdf_pointcloud_pub_.publish(pointcloud);
+  //TODO tsdf_pointcloud_pub_.publish(pointcloud);
 }
 
 void TsdfServer::publishTsdfSurfacePoints() {
@@ -423,11 +361,11 @@ void TsdfServer::publishTsdfSurfacePoints() {
   pcl::PointCloud<pcl::PointXYZRGB> pointcloud;
   const float surface_distance_thresh =
       tsdf_map_->getTsdfLayer().voxel_size() * 0.75;
-  createSurfacePointcloudFromTsdfLayer(tsdf_map_->getTsdfLayer(),
-                                       surface_distance_thresh, &pointcloud);
+  //TODO createSurfacePointcloudFromTsdfLayer(tsdf_map_->getTsdfLayer(),
+  //TODO                                      surface_distance_thresh, &pointcloud);
 
   pointcloud.header.frame_id = world_frame_;
-  surface_pointcloud_pub_.publish(pointcloud);
+  //TODO  surface_pointcloud_pub_.publish(pointcloud);
 }
 
 void TsdfServer::publishTsdfOccupiedNodes() {
@@ -487,7 +425,7 @@ void TsdfServer::publishPointclouds() {
 
 void TsdfServer::updateMesh() {
   if (verbose_) {
-    ROS_INFO("Updating mesh.");
+    //ROS_INFO("Updating mesh.");
   }
 
   timing::Timer generate_mesh_timer("mesh/update");
@@ -534,7 +472,7 @@ bool TsdfServer::generateMesh() {
   voxblox_msgs::msg::Mesh mesh_msg;
   generateVoxbloxMeshMsg(mesh_layer_, color_mode_, &mesh_msg);
   mesh_msg.header.frame_id = world_frame_;
-  mesh_pub_.publish(mesh_msg);
+  //TODO mesh_pub_.publish(mesh_msg);
 
   publish_mesh_timer.Stop();
 
@@ -543,13 +481,13 @@ bool TsdfServer::generateMesh() {
     const bool success = outputMeshLayerAsPly(mesh_filename_, *mesh_layer_);
     output_mesh_timer.Stop();
     if (success) {
-      ROS_INFO("Output file as PLY: %s", mesh_filename_.c_str());
+      //ROS_INFO("Output file as PLY: %s", mesh_filename_.c_str());
     } else {
-      ROS_INFO("Failed to output mesh as PLY: %s", mesh_filename_.c_str());
+      //ROS_INFO("Failed to output mesh as PLY: %s", mesh_filename_.c_str());
     }
   }
 
-  ROS_INFO_STREAM("Mesh Timings: " << std::endl << timing::Timing::Print());
+  //ROS_INFO_STREAM("Mesh Timings: " << std::endl << timing::Timing::Print());
   return true;
 }
 
@@ -638,9 +576,9 @@ void TsdfServer::tsdfMapCallback(const voxblox_msgs::msg::Layer& layer_msg) {
       deserializeMsgToLayer<TsdfVoxel>(layer_msg, tsdf_map_->getTsdfLayerPtr());
 
   if (!success) {
-    ROS_ERROR_THROTTLE(10, "Got an invalid TSDF map message!");
+    //TODO ROS_ERROR_THROTTLE(10, "Got an invalid TSDF map message!");
   } else {
-    ROS_INFO_ONCE("Got an TSDF map from ROS topic!");
+    //TODO ROS_INFO_ONCE("Got an TSDF map from ROS topic!");
     if (publish_pointclouds_on_update_) {
       publishPointclouds();
     }

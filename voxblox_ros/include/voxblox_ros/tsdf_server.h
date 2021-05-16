@@ -36,7 +36,6 @@ constexpr float kDefaultMaxIntensity = 100.0;
 
 class TsdfServer : public rclcpp::Node {
  public:
-  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
   TsdfServer();
   TsdfServer(const TsdfMap::Config& config,
@@ -61,7 +60,7 @@ class TsdfServer : public rclcpp::Node {
   virtual void newPoseCallback(const Transformation& /*new_pose*/) {
     // Do nothing.
   }
-
+  /**
   void publishAllUpdatedTsdfVoxels();
   void publishTsdfSurfacePoints();
   void publishTsdfOccupiedNodes();
@@ -92,8 +91,8 @@ class TsdfServer : public rclcpp::Node {
   bool publishTsdfMapCallback(std_srvs::srv::Empty::Request& request,     // NOLINT
                               std_srvs::srv::Empty::Response& response);  // NOLINT
 
-  void updateMeshEvent(const rclcpp::TimerEvent& event);
-  void publishMapEvent(const rclcpp::TimerEvent& event);
+  void updateMeshEvent();//TODO: removed this, const voxblox::timing::TimerEvent& event);
+  void publishMapEvent();//TODO: removed this, const voxblox::timing::TimerEvent& event);
 
   std::shared_ptr<TsdfMap> getTsdfMapPtr() { return tsdf_map_; }
   std::shared_ptr<const TsdfMap> getTsdfMapPtr() const { return tsdf_map_; }
@@ -128,37 +127,37 @@ class TsdfServer : public rclcpp::Node {
       sensor_msgs::msg::PointCloud2::Ptr* pointcloud_msg, Transformation* T_G_C);
 
   /// Data subscribers.
-  rclcpp::Subscriber pointcloud_sub_;
-  rclcpp::Subscriber freespace_pointcloud_sub_;
+  //rclcpp::Subscription<pcl::PointCloud<pcl::PointXYZI>> pointcloud_sub_;
+  //rclcpp::Subscription<pcl::PointCloud<pcl::PointXYZI>> freespace_pointcloud_sub_;
 
   /// Publish markers for visualization.
-  rclcpp::Publisher mesh_pub_;
-  rclcpp::Publisher<pcl::PointCloud<pcl::PointXYZI>> tsdf_pointcloud_pub_;
-  rclcpp::Publisher<pcl::PointCloud<pcl::PointXYZRGB>> surface_pointcloud_pub_;
-  rclcpp::Publisher<pcl::PointCloud<pcl::PointXYZI>> tsdf_slice_pub_;
-  rclcpp::Publisher<visualization_msgs::msg::MarkerArray> occupancy_marker_pub_;
-  rclcpp::Publisher<geometry_msgs::msg::TransformStamped> icp_transform_pub_;
+  //rclcpp::Publisher<pcl::PointCloud<pcl::PointXYZI>> mesh_pub_;
+  //rclcpp::Publisher<pcl::PointCloud<pcl::PointXYZI>> tsdf_pointcloud_pub_;
+  //rclcpp::Publisher<pcl::PointCloud<pcl::PointXYZRGB>> surface_pointcloud_pub_;
+  //rclcpp::Publisher<pcl::PointCloud<pcl::PointXYZI>> tsdf_slice_pub_;
+  //rclcpp::Publisher<visualization_msgs::msg::MarkerArray> occupancy_marker_pub_;
+  //rclcpp::Publisher<geometry_msgs::msg::TransformStamped> icp_transform_pub_;
 
   /// Publish the complete map for other nodes to consume.
-  rclcpp::Publisher<voxblox_msgs::msg::Layer> tsdf_map_pub_;
+  //rclcpp::Publisher<voxblox_msgs::msg::Layer> tsdf_map_pub_;
 
   /// Subscriber to subscribe to another node generating the map.
-  rclcpp::Subscriber<voxblox_msgs::msg::Layer> tsdf_map_sub_;
+  //rclcpp::Subscription<voxblox_msgs::msg::Layer> tsdf_map_sub_;
 
-  // Services.
-  rclcpp::Service generate_mesh_srv_;
-  rclcpp::Service clear_map_srv_;
-  rclcpp::Service save_map_srv_;
-  rclcpp::Service load_map_srv_;
-  rclcpp::Service publish_pointclouds_srv_;
-  rclcpp::Service publish_tsdf_map_srv_;
+  // Services. TODO: the generic types are wrong
+  //rclcpp::Service<pcl::PointCloud<pcl::PointXYZI>> generate_mesh_srv_;
+  //rclcpp::Service<pcl::PointCloud<pcl::PointXYZI>> clear_map_srv_;
+  //rclcpp::Service<pcl::PointCloud<pcl::PointXYZI>> save_map_srv_;
+  //rclcpp::Service<pcl::PointCloud<pcl::PointXYZI>> load_map_srv_;
+  //rclcpp::Service<pcl::PointCloud<pcl::PointXYZI>> publish_pointclouds_srv_;
+  //rclcpp::Service<pcl::PointCloud<pcl::PointXYZI>> publish_tsdf_map_srv_;
 
   /// Tools for broadcasting TFs.
   tf2_ros::TransformBroadcaster tf_broadcaster_;
 
   // Timers.
-  rclcpp::Timer update_mesh_timer_;
-  rclcpp::Timer publish_map_timer_;
+  voxblox::timing::Timer update_mesh_timer_;
+  voxblox::timing::Timer publish_map_timer_;
 
   bool verbose_;
 
@@ -196,7 +195,7 @@ class TsdfServer : public rclcpp::Node {
   std::shared_ptr<ColorMap> color_map_;
 
   /// Will throttle to this message rate.
-  ros::Duration min_time_between_msgs_;
+  rclcpp::Duration min_time_between_msgs_;
 
   /// What output information to publish
   bool publish_pointclouds_on_update_;
