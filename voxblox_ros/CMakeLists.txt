@@ -15,6 +15,8 @@ find_package(OpenCV REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(Gflags REQUIRED)
 find_package(Glog REQUIRED)
+find_package(pcl_conversions REQUIRED)
+
 
 #find_package(minkindr_conversions REQUIRED)
 
@@ -32,6 +34,7 @@ include_directories(
   ${GFLAGS_INCLUDE_DIRS}
   ${voxblox_INCLUDE_DIRS}
   ${voxblox_msgs_INCLUDE_DIRS}
+  ${pcl_conversions_INCLUDE_DIRS}
 )
 
 set(executable_name tsdf_server_node)
@@ -56,6 +59,7 @@ set(dependencies
   OpenCV
   visualization_msgs
   Gflags
+  pcl_conversions
 )
 
 add_library(${library_name} SHARED

@@ -7,7 +7,7 @@
 
 #include <pcl/point_types.h>
 #include <sensor_msgs/msg/point_cloud.hpp>
-//#include <std_msgs/ColorRGBA.h>
+#include <std_msgs/msg/color_rgba.hpp>
 
 #include <voxblox/core/common.h>
 #include <voxblox/core/layer.h>
