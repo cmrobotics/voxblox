@@ -3,8 +3,12 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <voxblox_ros/conversions.h>
+#include <geometry_msgs/msg/transform_stamped.hpp>
+#include <tf2/LinearMath/Transform.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <voxblox/utils/timing.h>
+#include <voxblox_ros/kindr_tf.h>
+#include <voxblox_ros/kindr_msg.h>
 
 void TsdfServer::processPointCloudMessageAndInsert(
     const sensor_msgs::msg::PointCloud2::Ptr& pointcloud_msg,
@@ -31,38 +35,29 @@ void TsdfServer::processPointCloudMessageAndInsert(
     pcl::PointCloud<pcl::PointXYZRGB> pointcloud_pcl;
     // pointcloud_pcl is modified below:
     pcl::fromROSMsg(*pointcloud_msg, pointcloud_pcl);
-    // pcl::PointCloud<pcl::PointXYZRGB>&, int&, voxblox::Pointcloud*, voxblox::Colors*)’
-    // voxblox::convertPointcloud(pointcloud_pcl, color_map_, &points_C, &colors);
-    // -------------------------------------
-    //  inline void convertPointcloud(
-    //  const typename pcl::PointCloud<PCLPoint>& pointcloud_pcl,
-    //  const std::shared_ptr<ColorMap>& color_map,
-    //  Pointcloud* points_C,
-    //  Colors* colors) {
     voxblox::convertPointcloud(pointcloud_pcl, color_map_, &points_C, &colors);
   } else if (has_intensity) {
     pcl::PointCloud<pcl::PointXYZI> pointcloud_pcl;
     // pointcloud_pcl is modified below:
     pcl::fromROSMsg(*pointcloud_msg, pointcloud_pcl);
-    //convertPointcloud(pointcloud_pcl, color_map_, &points_C, &colors);
+    convertPointcloud(pointcloud_pcl, color_map_, &points_C, &colors);
   } else {
     pcl::PointCloud<pcl::PointXYZ> pointcloud_pcl;
     // pointcloud_pcl is modified below:
     pcl::fromROSMsg(*pointcloud_msg, pointcloud_pcl);
-    //convertPointcloud(pointcloud_pcl, color_map_, &points_C, &colors);
+    convertPointcloud(pointcloud_pcl, color_map_, &points_C, &colors);
   }
   ptcloud_timer.Stop();
 
- /**
 
 
-  Transformation T_G_C_refined = T_G_C;
+  voxblox::Transformation T_G_C_refined = T_G_C;
   if (enable_icp_) {
-    timing::Timer icp_timer("icp");
+    voxblox::timing::Timer icp_timer("icp");
     if (!accumulate_icp_corrections_) {
       icp_corrected_transform_.setIdentity();
     }
-    static Transformation T_offset;
+    static voxblox::Transformation T_offset;
     const size_t num_icp_updates =
         icp_->runICP(tsdf_map_->getTsdfLayer(), points_C,
                      icp_corrected_transform_ * T_G_C, &T_G_C_refined);
@@ -75,34 +70,40 @@ void TsdfServer::processPointCloudMessageAndInsert(
     if (!icp_->refiningRollPitch()) {
       // its already removed internally but small floating point errors can
       // build up if accumulating transforms
-      Transformation::Vector6 T_vec = icp_corrected_transform_.log();
+      voxblox::Transformation::Vector6 T_vec = icp_corrected_transform_.log();
       T_vec[3] = 0.0;
       T_vec[4] = 0.0;
-      icp_corrected_transform_ = Transformation::exp(T_vec);
+      icp_corrected_transform_ = voxblox::Transformation::exp(T_vec);
     }
 
     // Publish transforms as both TF and message.
     tf2::Transform icp_tf_msg, pose_tf_msg;
     geometry_msgs::msg::TransformStamped transform_msg;
 
-    tf2::transformKindrToTF(icp_corrected_transform_.cast<double>(),
+    tf::transformKindrToTF(icp_corrected_transform_.cast<double>(),
                            &icp_tf_msg);
-    tf2::transformKindrToTF(T_G_C.cast<double>(), &pose_tf_msg);
-    tf2::transformKindrToMsg(icp_corrected_transform_.cast<double>(),
+    tf::transformKindrToTF(T_G_C.cast<double>(), &pose_tf_msg);
+    tf::transformKindrToMsg(icp_corrected_transform_.cast<double>(),
                             &transform_msg.transform);
+
+    geometry_msgs::msg::TransformStamped world_to_icp;
+    world_to_icp.header.stamp = pointcloud_msg->header.stamp;
+    world_to_icp.header.frame_id = world_frame_;
+    world_to_icp.child_frame_id  = icp_corrected_frame_;
+    //world_to_icp.transform.rotation = icp_tf_msg.getRotation();
+    //world_to_icp.transform.translation = icp_tf_msg.getOrigin();
+    tf_broadcaster_.sendTransform(world_to_icp);
+ /**
     tf_broadcaster_.sendTransform(
-        tf2::StampedTransform(icp_tf_msg, pointcloud_msg->header.stamp,
-                             world_frame_, icp_corrected_frame_));
-    tf_broadcaster_.sendTransform(
-        tf2::StampedTransform(pose_tf_msg, pointcloud_msg->header.stamp,
-                             icp_corrected_frame_, pose_corrected_frame_));
+        geometry_msgs::msg::TransformStamped(
+            pose_tf_msg, pointcloud_msg->header.stamp,
+            icp_corrected_frame_, pose_corrected_frame_));
 
     transform_msg.header.frame_id = world_frame_;
     transform_msg.child_frame_id = icp_corrected_frame_;
     icp_transform_pub_.publish(transform_msg);
 
     icp_timer.Stop();
-  }
 
   if (verbose_) {
     //TODO ROS_INFO("Integrating a pointcloud with %lu points.", points_C.size());
@@ -127,4 +128,6 @@ void TsdfServer::processPointCloudMessageAndInsert(
   // Callback for inheriting classes.
   newPoseCallback(T_G_C);
   */
+  }
+
 }
