@@ -93,7 +93,7 @@ void TsdfServer::processPointCloudMessageAndInsert(
       pose_geometry_msg.child_frame_id  = pose_corrected_frame_;
       tf_broadcaster_.sendTransform(pose_geometry_msg);
 
-      icp_transform_pub_.publish(icp_geometry_msg);
+      icp_transform_pub_->publish(icp_geometry_msg);
       icp_timer.Stop();
     }
 
