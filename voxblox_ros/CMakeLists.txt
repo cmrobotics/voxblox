@@ -16,6 +16,8 @@ find_package(visualization_msgs REQUIRED)
 find_package(Gflags REQUIRED)
 find_package(Glog REQUIRED)
 find_package(pcl_conversions REQUIRED)
+find_package(tf2_eigen REQUIRED)
+
 
 
 #find_package(minkindr_conversions REQUIRED)
@@ -60,6 +62,7 @@ set(dependencies
   visualization_msgs
   Gflags
   pcl_conversions
+  tf2_eigen
 )
 
 add_library(${library_name} SHARED

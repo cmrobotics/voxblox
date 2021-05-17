@@ -84,14 +84,23 @@ class TsdfServer : public rclcpp::Node
     /// Name of the pose in the ICP correct Frame.
     std::string pose_corrected_frame_;
 
+    rclcpp::Publisher<geometry_msgs::msg::TransformStamped> icp_transform_pub_;
+
+
   public:
+
     TsdfServer(): Node("tsdf_server"),
         tf_broadcaster_(tf2_ros::TransformBroadcaster(this)) {
       //pointcloud_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
       //  "pointcloud", 10, std::bind(&TsdfServer::pointcloud_sub_callback, this, _1));
     }
+
     void processPointCloudMessageAndInsert(
       const sensor_msgs::msg::PointCloud2::Ptr& pointcloud_msg,
       const voxblox::Transformation& T_G_C, const bool is_freespace_pointcloud);
 
+    void integratePointcloud(const voxblox::Transformation& T_G_C,
+                                     const voxblox::Pointcloud& ptcloud_C,
+                                     const voxblox::Colors& colors,
+                                     const bool is_freespace_pointcloud);
 };
