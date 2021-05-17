@@ -11,18 +11,23 @@
 #include <tf2/LinearMath/Vector3.h>
 #include <tf2/LinearMath/Quaternion.h>
 //#include <tf_conversions/tf_eigen.h>
-
+#include <tf2_eigen/tf2_eigen.h>
 namespace tf {
 // A wrapper for the relevant functions in eigen_conversions.
+
 template <typename Scalar>
 void quaternionKindrToTF(
     const kindr::minimal::RotationQuaternionTemplate<Scalar>& kindr,
     tf2::Quaternion* tf_type) {
   CHECK_NOTNULL(tf_type);
-  quaternionEigenToTF(kindr.toImplementation(), *tf_type);
+  tf_type->setX(kindr.x);
+  tf_type->setY(kindr.y);
+  tf_type->setZ(kindr.z);
+  tf_type->setW(kindr.w);
+
+  //quaternionEigenToTF(kindr.toImplementation(), *tf_type);
 }
 
-/**
 template <typename Scalar>
 void quaternionTFToKindr(
     const geometry_msgs::msg::Quaternion& tf_type,
@@ -49,14 +54,15 @@ void quaternionTFToKindr(const geometry_msgs::msg::Quaternion& tf_type,
   quaternionTFToEigen(tf_type, kindr_double);
   *kindr = kindr_double.cast<Scalar>();
 }
-*/
+
 
 // A wrapper for the relevant functions in eigen_conversions.
 template <typename Scalar>
 void vectorKindrToTF(const Eigen::Matrix<Scalar, 3, 1>& kindr,
                      tf2::Vector3* tf_type) {
   CHECK_NOTNULL(tf_type);
-  vectorEigenToTF(kindr, *tf_type);
+  //vectorEigenToTF(kindr, *tf_type)
+  tf_type->setValue(kindr(0, 0), kindr(1, 0), kindr(2, 0));
 }
 
 /**
