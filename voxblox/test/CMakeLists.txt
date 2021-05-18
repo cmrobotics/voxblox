@@ -1,0 +1,8 @@
+ament_add_gtest(test_approx_hash_array test_approx_hash_array.cc)
+target_link_libraries(test_approx_hash_array voxblox glog)
+
+ament_add_gtest(test_bucket_queue test_bucket_queue.cc)
+target_link_libraries(test_bucket_queue voxblox glog)
+
+ament_add_gtest(test_clear_spheres test_clear_spheres.cc)
+target_link_libraries(test_clear_spheres voxblox glog protobuf eigen)
