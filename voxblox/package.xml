@@ -3,8 +3,8 @@
 <package format="3">
   <name>voxblox</name>
   <version>0.0.1</version>
-  
-  
+
+
   <description>Voxblox</description>
 
   <author email="helen.oleynikova@mavt.ethz.ch">Helen Oleynikova</author>
@@ -22,9 +22,8 @@
   <depend>eigen</depend>
   <depend>gflags</depend>
   <depend>glog</depend>
-  <depend>minkindr</depend>
   <depend>protobuf</depend>
-  
+
   <test_depend>ament_lint_common</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_cmake_gtest</test_depend>
