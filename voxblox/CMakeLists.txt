@@ -3,13 +3,14 @@ project(voxblox)
 
 find_package(ament_cmake REQUIRED)
 find_package(Protobuf REQUIRED)
-find_package(Eigen3 REQUIRED)
+#find_package(eigen3_cmake_module REQUIRED)
+find_package(Eigen3 3.3 REQUIRED)
 find_package(Gflags REQUIRED)
 find_package(Glog REQUIRED)
 
-set(CMAKE_CXX_STANDARD 17)
-set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall --std=c++17 -O3 -fPIC" )
-set( CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -Wall -O3 -fPIC" )
+set(CMAKE_CXX_STANDARD 11)
+#set( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall --std=c++11 -O3 -fPIC" )
+#set( CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} -Wall -O3 -fPIC" )
 
 set(dependencies
   Protobuf
@@ -21,7 +22,6 @@ set(dependencies
 ############
 # PROTOBUF #
 ############
-
 INCLUDE(FindProtobuf)
 INCLUDE_DIRECTORIES(${PROTOBUF_INCLUDE_DIR})
 SET_SOURCE_FILES_PROPERTIES(${PROTO_SRC} ${PROTO_INCL} PROPERTIES GENERATED TRUE)
@@ -62,81 +62,16 @@ set("${PROJECT_NAME}_SRCS"
 )
 
 
-#########
-# TESTS #
-#########
-if(BUILD_TESTING)
-  find_package(ament_cmake_gtest REQUIRED)
-  add_subdirectory(test)
-endif()
-
-#add_custom_target(test_data)
-#add_custom_command(TARGET test_data
-#                  COMMAND rm -rf test_data
-#                  COMMAND mkdir -p test_data
-#                  COMMAND cp -r ${CMAKE_SOURCE_DIR}/test/test_data/*
-#                                test_data/ || :)
-#
-##add_definitions(-DVISUALIZE_UNIT_TEST_RESULTS)
-#
-#catkin_add_gtest(test_approx_hash_array
-#  test/test_approx_hash_array.cc
-#)
-#target_link_libraries(test_approx_hash_array ${PROJECT_NAME})
-#
-#catkin_add_gtest(test_tsdf_map
-#  test/test_tsdf_map.cc
-#)
-#target_link_libraries(test_tsdf_map ${PROJECT_NAME})
-#
-#catkin_add_gtest(test_protobuf
-#  test/test_protobuf.cc
-#)
-#target_link_libraries(test_protobuf ${PROJECT_NAME})
-#
-#catkin_add_gtest(test_tsdf_interpolator
-#  test/test_tsdf_interpolator.cc
-#)
-#target_link_libraries(test_tsdf_interpolator ${PROJECT_NAME})
-#
-#catkin_add_gtest(test_layer
-#  test/test_layer.cc
-#)
-#target_link_libraries(test_layer ${PROJECT_NAME})
-#
-#catkin_add_gtest(test_merge_integration
-#  test/test_merge_integration.cc
-#)
-#target_link_libraries(test_merge_integration ${PROJECT_NAME})
-#
-#catkin_add_gtest(test_layer_utils
-#  test/test_layer_utils.cc
-#)
-#target_link_libraries(test_layer_utils ${PROJECT_NAME})
-#
-#catkin_add_gtest(test_sdf_integrators
-#  test/test_sdf_integrators.cc
-#)
-#target_link_libraries(test_sdf_integrators ${PROJECT_NAME})
-#
-#catkin_add_gtest(test_bucket_queue
-#  test/test_bucket_queue.cc
-#)
-#target_link_libraries(test_bucket_queue ${PROJECT_NAME})
-#
-#catkin_add_gtest(test_clear_spheres
-#  test/test_clear_spheres.cc
-#)
-#target_link_libraries(test_clear_spheres ${PROJECT_NAME})
-
-
-
 ############
 # BINARIES #
 ############
+add_definitions(${EIGEN3_DEFINITIONS})
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
+include_directories(include
+  ${EIGEN3_INCLUDE_DIR}
+)
 
 
-include_directories(include)
 add_library (voxblox ${${PROJECT_NAME}_SRCS})
 target_include_directories(voxblox
   PUBLIC
@@ -160,8 +95,19 @@ install(
   DESTINATION include/
 )
 
+ament_target_dependencies(voxblox ${dependencies})
 
 ament_export_include_directories(include)
 ament_export_libraries(voxblox)
+
+#########
+# TESTS #
+#########
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  add_subdirectory(test)
+endif()
+
+
 ament_export_dependencies(${dependencies})
 ament_package()
